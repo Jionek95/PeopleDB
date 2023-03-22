@@ -1,8 +1,12 @@
 package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.model.Person;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -10,9 +14,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PeopleRepositoryTests {
 
+    private Connection connection;
+
+    @BeforeEach
+    void setUp() throws SQLException {
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/crudapi", "root", "123456");
+    }
+
     @Test
     public void canSaveOnePerson(){
-        PeopleRepository repo = new PeopleRepository();
+        PeopleRepository repo = new PeopleRepository(connection);
         Person john = new Person(
                 "John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))
         );
@@ -22,7 +33,7 @@ public class PeopleRepositoryTests {
 
    @Test
    public void canSaveTwoPeople(){
-       PeopleRepository repo = new PeopleRepository();
+       PeopleRepository repo = new PeopleRepository(connection);
        Person john = new Person(
                "John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))
        );
