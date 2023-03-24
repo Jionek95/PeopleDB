@@ -23,6 +23,7 @@ public class PeopleRepository {
             while (rs.next()){
                 long id = rs.getLong(1);
                 person.setId(id);
+//                ps.executeQuery("select * from people");
             }
             System.out.printf("Records affected: %d%n", recordsAffected);
         } catch (SQLException e) {
