@@ -1,6 +1,7 @@
 package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.model.Person;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,8 +24,14 @@ public class PeopleRepositoryTests {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/crudapi", "root", "123456");
+    }
+
+    @AfterEach
+    void tearDown() throws SQLException {
+        if (connection != null) {
+            connection.close();
+        }
     }
 
     @Test
