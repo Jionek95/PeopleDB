@@ -25,6 +25,7 @@ public class PeopleRepositoryTests {
             throw new RuntimeException(e);
         }
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/crudapi", "root", "123456");
+        connection.setAutoCommit(false);
     }
 
     @AfterEach
