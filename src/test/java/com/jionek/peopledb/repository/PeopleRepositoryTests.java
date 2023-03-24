@@ -18,7 +18,16 @@ public class PeopleRepositoryTests {
 
     @BeforeEach
     void setUp() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/crudapi", "root", "123456");
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/crudapi", "root", "123456");
     }
 
     @Test
