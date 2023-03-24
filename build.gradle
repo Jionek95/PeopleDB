@@ -10,6 +10,8 @@ repositories {
 }
 
 dependencies {
+    implementation 'mysql:mysql-connector-java:5.1.13'
+
     implementation 'net.xdob.h2db:h2:2.0.0'
 //    testImplementation 'org.assertj:assertj-parent-pom:2.2.18'
     testImplementation 'org.assertj:assertj-core:3.24.2'
