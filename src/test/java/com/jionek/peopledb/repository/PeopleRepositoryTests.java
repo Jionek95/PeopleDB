@@ -51,7 +51,7 @@ public class PeopleRepositoryTests {
                "John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))
        );
        Person bobby = new Person(
-               "Bobby", "Horse", ZonedDateTime.of(1985, 11, 25 , 15,15,12,0, ZoneId.of("-6"))
+               "Bobby", "Horse", ZonedDateTime.of(1985, 11, 25 , 15,15,12,0, ZoneId.of("-8"))
        );
        Person savedPerson1 = repo.save(john);
        Person savedPerson2 = repo.save(bobby);
