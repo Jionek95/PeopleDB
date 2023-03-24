@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PeopleRepositoryTests {
 
     private Connection connection;
+    private PeopleRepository repo;
 
     @BeforeEach
     void setUp() throws SQLException {
@@ -26,6 +27,7 @@ public class PeopleRepositoryTests {
         }
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/crudapi", "root", "123456");
         connection.setAutoCommit(false);
+        repo = new PeopleRepository(connection);
     }
 
     @AfterEach
@@ -37,7 +39,6 @@ public class PeopleRepositoryTests {
 
     @Test
     public void canSaveOnePerson(){
-        PeopleRepository repo = new PeopleRepository(connection);
         Person john = new Person(
                 "John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))
         );
@@ -47,7 +48,6 @@ public class PeopleRepositoryTests {
 
    @Test
    public void canSaveTwoPeople(){
-       PeopleRepository repo = new PeopleRepository(connection);
        Person john = new Person(
                "John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))
        );
