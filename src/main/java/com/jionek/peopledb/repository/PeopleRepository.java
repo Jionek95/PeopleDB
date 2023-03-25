@@ -36,6 +36,8 @@ public class PeopleRepository {
 
 
     public Person findById(Long id) {
-        return new Person("","",null);
+        Person person = new Person("", "", null);
+        person.setId(id);
+        return person;
     }
 }
