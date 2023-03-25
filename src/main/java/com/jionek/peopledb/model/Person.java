@@ -1,6 +1,7 @@
 package com.jionek.peopledb.model;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 public class Person {
     private Long id;
@@ -53,5 +54,17 @@ public class Person {
                 ", lastName='" + lastName + '\'' +
                 ", dob=" + dob +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person person)) return false;
+        return Objects.equals(id, person.id) && firstName.equals(person.firstName) && lastName.equals(person.lastName) && dob.equals(person.dob);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, dob);
     }
 }
