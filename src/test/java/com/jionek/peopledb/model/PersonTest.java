@@ -15,5 +15,12 @@ class PersonTest {
         assertThat(p1).isEqualTo(p2);
     }
 
+    @Test
+    public void testForInequality(){
+        Person p1 = new Person("p1", "Smith", ZonedDateTime.of(2000,9,1,12,0,0,0, ZoneId.of("+0")));
+        Person p2 = new Person("p2", "Smith", ZonedDateTime.of(2000,9,1,12,0,0,0, ZoneId.of("+0")));
+        assertThat(p1).isNotEqualTo(p2);
+    }
+
 
 }
