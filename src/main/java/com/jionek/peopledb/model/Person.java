@@ -7,7 +7,7 @@ public class Person {
     private String firstName;
     private String lastName;
     private ZonedDateTime dob;
-    public Person(String firstName, String lastName, ZonedDateTime dob) {
+    public Person (String firstName, String lastName, ZonedDateTime dob) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
