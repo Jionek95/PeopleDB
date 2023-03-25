@@ -13,7 +13,7 @@ public class PeopleRepository {
         this.connection = connection;
     }
 
-    public Person save(Person person) {
+    public Person save(Person person) throws UnableToSaveException{
         try {
             PreparedStatement ps = connection.prepareStatement(SAVE_PERSON_SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, person.getFirstName());
