@@ -1,5 +1,6 @@
 package com.jionek.peopledb.repository;
 
+import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Person;
 
 import java.sql.*;
@@ -27,7 +28,8 @@ public class PeopleRepository {
             }
             System.out.printf("Records affected: %d%n", recordsAffected);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new UnableToSaveException("Tried to save person: " + person);
         }
         return person;
     }
