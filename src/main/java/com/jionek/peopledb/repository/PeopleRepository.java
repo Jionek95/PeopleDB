@@ -5,6 +5,7 @@ import com.jionek.peopledb.model.Person;
 
 import java.sql.*;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class PeopleRepository {
     public static final String SAVE_PERSON_SQL = "INSERT INTO PEOPLE (FIRST_NAME, LAST_NAME, DOB) VALUES(?, ?, ?)";
@@ -36,8 +37,24 @@ public class PeopleRepository {
 
 
     public Person findById(Long id) {
-        Person person = new Person("", "", null);
-        person.setId(id);
+        Person person = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT ID, FIRST_NAME, LAST_NAME, DOB FROM PEOPLE WHERE ID=?");
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                long personId = rs.getLong("ID");
+                String firstName = rs.getString("FIRST_NAME");
+                String lastName = rs.getString("LAST_NAME");
+                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
+                person = new Person(firstName, lastName, dob);
+                person.setId(personId);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return person;
     }
 }
