@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PeopleRepositoryTests {
+public class PeopleRepositoryTest {
 
     private Connection connection;
     private PeopleRepository repo;
