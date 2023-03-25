@@ -1,5 +1,6 @@
 package com.jionek.peopledb.model;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -60,7 +61,8 @@ public class Person {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Person person)) return false;
-        return Objects.equals(id, person.id) && firstName.equals(person.firstName) && lastName.equals(person.lastName) && dob.equals(person.dob);
+        return Objects.equals(id, person.id) && firstName.equals(person.firstName) && lastName.equals(person.lastName) &&
+                dob.withZoneSameInstant(ZoneId.of("+0")).equals(person.dob.withZoneSameInstant(ZoneId.of("+0")));
     }
 
     @Override
