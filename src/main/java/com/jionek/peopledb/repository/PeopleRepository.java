@@ -6,6 +6,7 @@ import com.jionek.peopledb.model.Person;
 import java.sql.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 public class PeopleRepository {
     public static final String SAVE_PERSON_SQL = "INSERT INTO PEOPLE (FIRST_NAME, LAST_NAME, DOB) VALUES(?, ?, ?)";
@@ -36,7 +37,7 @@ public class PeopleRepository {
     }
 
 
-    public Person findById(Long id) {
+    public Optional<Person> findById(Long id) {
         Person person = null;
 
         try {
@@ -55,6 +56,6 @@ public class PeopleRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return person;
+        return Optional.ofNullable(person);
     }
 }
