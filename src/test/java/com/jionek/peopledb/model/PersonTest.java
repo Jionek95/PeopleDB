@@ -22,5 +22,4 @@ class PersonTest {
         assertThat(p1).isNotEqualTo(p2);
     }
 
-
 }
