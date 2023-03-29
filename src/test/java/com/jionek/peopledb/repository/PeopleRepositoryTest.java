@@ -64,7 +64,7 @@ public class PeopleRepositoryTest {
     public void canFindPersonById(){
        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now()));
        Person foundPerson = repo.findById(savedPerson.getId()).get();
-       assertThat(foundPerson).isEqualTo(savedPerson);
+       assertThat(foundPerson.equals(savedPerson));
    }
 
     @Test
