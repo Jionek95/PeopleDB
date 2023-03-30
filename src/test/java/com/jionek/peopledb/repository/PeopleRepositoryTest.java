@@ -30,14 +30,12 @@ public class PeopleRepositoryTest {
         connection.setAutoCommit(false);
         repo = new PeopleRepository(connection);
     }
-
     @AfterEach
     void tearDown() throws SQLException {
         if (connection != null) {
             connection.close();
         }
     }
-
     @Test
     public void canSaveOnePerson(){
         Person john = new Person(
@@ -46,7 +44,6 @@ public class PeopleRepositoryTest {
         Person savedPerson = repo.save(john);
         assertThat(savedPerson.getId()).isGreaterThan(0);
     }
-
    @Test
    public void canSaveTwoPeople(){
        Person john = new Person(
@@ -59,18 +56,17 @@ public class PeopleRepositoryTest {
        Person savedPerson2 = repo.save(bobby);
        assertThat(savedPerson1.getId()).isNotEqualTo(savedPerson2.getId());
    }
-
    @Test
     public void canFindPersonById(){
        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now()));
        Person foundPerson = repo.findById(savedPerson.getId()).get();
        assertThat(foundPerson.equals(savedPerson));
    }
-
     @Test
     public void testPersonIdNotFound(){
         Optional<Person> foundId = repo.findById(-1L);
         assertThat(foundId).isEmpty();
     }
+
 
 }
