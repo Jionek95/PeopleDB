@@ -6,6 +6,7 @@ import com.jionek.peopledb.model.Person;
 import java.sql.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +63,7 @@ public class PeopleRepository {
         return Optional.ofNullable(person);
     }
     public List<Person> findAll(){
-        List<Person> people = null;
+        List<Person> people = new ArrayList<>();
 
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM PEOPLE");
