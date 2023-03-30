@@ -68,5 +68,19 @@ public class PeopleRepositoryTest {
         assertThat(foundId).isEmpty();
     }
 
+    @Test
+    public void testNumberOfPeople(){
+
+    }
+
+//    @Test
+//    public void canGetCount(){
+//        repo.count();
+//    }
+//    @Test
+//    public void  deletePerson(){
+//        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now()));
+//    }
+
 
 }
