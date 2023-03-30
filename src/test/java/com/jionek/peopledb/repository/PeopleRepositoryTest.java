@@ -28,7 +28,7 @@ public class PeopleRepositoryTest {
             throw new RuntimeException(e);
         }
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/crudapi", "root", "123456");
-        connection.setAutoCommit(false);
+        connection.setAutoCommit(true);
         repo = new PeopleRepository(connection);
     }
     @AfterEach
