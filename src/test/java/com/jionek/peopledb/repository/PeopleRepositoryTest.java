@@ -105,5 +105,4 @@ public class PeopleRepositoryTest {
         assertThat(endCount).isEqualTo(startCount - 1);
     }
 
-
 }
