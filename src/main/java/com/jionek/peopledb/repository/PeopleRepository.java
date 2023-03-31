@@ -100,8 +100,8 @@ public class PeopleRepository {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM PEOPLE WHERE ID=?");
             ps.setLong(1, id);
-            ResultSet rs = ps.executeQuery();
-
+            int recordsAffected = ps.executeUpdate();
+            System.out.println(recordsAffected);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
