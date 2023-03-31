@@ -96,10 +96,14 @@ public class PeopleRepositoryTest {
 
         assertThat(endCount).isEqualTo(startCount + 2);
     }
-//    @Test
-//    public void  deletePerson(){
-//        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now()));
-//    }
+    @Test
+    public void canDelete(){
+        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now()));
+        long startCount = repo.count();
+        repo.delete(savedPerson.getId());
+        long endCount = repo.count();
+        assertThat(endCount).isEqualTo(startCount - 1);
+    }
 
 
 }
