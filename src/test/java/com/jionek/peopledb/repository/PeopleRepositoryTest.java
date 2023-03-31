@@ -98,7 +98,7 @@ public class PeopleRepositoryTest {
     }
     @Test
     public void canDelete(){
-        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now()));
+        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now().withZoneSameInstant(ZoneId.of("+0"))));
         long startCount = repo.count();
         repo.delete(savedPerson);
         long endCount = repo.count();
