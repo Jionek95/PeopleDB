@@ -61,7 +61,7 @@ public class PeopleRepositoryTest {
     public void canFindPersonById(){
        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now()));
        Person foundPerson = repo.findById(savedPerson.getId()).get();
-       assertThat(foundPerson.equals(savedPerson));
+       assertThat(foundPerson).isEqualTo(savedPerson);
    }
     @Test
     public void testPersonIdNotFound(){
@@ -106,10 +106,12 @@ public class PeopleRepositoryTest {
     }
     @Test
     public void canDeleteMultiplePeople(){
-        long startCount = repo.count();
         Person p1 = repo.save(new Person("John1", "Smith", ZonedDateTime.of(1980, 11, 15, 15, 15, 0, 0, ZoneId.of("-6"))));
         Person p2 = repo.save(new Person("John2", "Smith", ZonedDateTime.of(1980, 11, 15, 15, 15, 0, 0, ZoneId.of("-6"))));
+        long startCount = repo.count();
         repo.delete(p1, p2);
+        long endCount = repo.count();
+        assertThat(endCount).isEqualTo(startCount - 2);
     }
 
 
