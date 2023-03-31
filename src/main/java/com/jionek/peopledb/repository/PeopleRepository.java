@@ -85,14 +85,27 @@ public class PeopleRepository {
         long count = 0;
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT (*) COUNT FROM PEOPLE");
+            PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) FROM PEOPLE");
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                count++;
+            if (rs.next()){
+                count = rs.getLong(1);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return count;
+    }
+
+    public void delete(Long id) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM PEOPLE WHERE ID=?");
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }
