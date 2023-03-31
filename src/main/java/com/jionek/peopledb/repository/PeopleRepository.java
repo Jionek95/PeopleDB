@@ -80,4 +80,19 @@ public class PeopleRepository {
         }
         return people;
     }
+
+    public long count() {
+        long count = 0;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT (*) COUNT FROM PEOPLE");
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                count++;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
 }
