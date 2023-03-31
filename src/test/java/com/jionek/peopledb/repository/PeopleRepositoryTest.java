@@ -87,10 +87,10 @@ public class PeopleRepositoryTest {
 
     }
 
-//    @Test
-//    public void canGetCount(){
-//        repo.count();
-//    }
+    @Test
+    public void canGetCount(){
+        repo.count();
+    }
 //    @Test
 //    public void  deletePerson(){
 //        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now()));
