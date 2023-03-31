@@ -109,6 +109,9 @@ public class PeopleRepository {
 
     }
 
-    public void delete(Person p1, Person p2) {
+    public void delete(Person...people) {
+        for(Person person : people){
+            delete(person);
+        }
     }
 }
