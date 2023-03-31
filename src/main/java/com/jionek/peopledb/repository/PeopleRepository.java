@@ -96,10 +96,10 @@ public class PeopleRepository {
         return count;
     }
 
-    public void delete(Long id) {
+    public void delete(Person person) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM PEOPLE WHERE ID=?");
-            ps.setLong(1, id);
+            ps.setLong(1, person.getId());
             int recordsAffected = ps.executeUpdate();
             System.out.println(recordsAffected);
         } catch (SQLException e) {
@@ -107,5 +107,8 @@ public class PeopleRepository {
         }
 
 
+    }
+
+    public void delete(Person p1, Person p2) {
     }
 }
