@@ -117,6 +117,11 @@ public class PeopleRepositoryTest {
     }
 @Test
     public void experiment(){
+        Person p1 = new Person(10L, null, null, null);
+        Person p2 = new Person(20L, null, null, null);
+        Person p3 = new Person(30L, null, null, null);
+        Person p4 = new Person(40L, null, null, null);
+        Person p5 = new Person(50L, null, null, null);
 
 }
 
