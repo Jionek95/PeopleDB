@@ -127,7 +127,8 @@ public class PeopleRepository {
                     .map(id -> String.valueOf(id))
                     .collect(joining(","));
 
-            cs.executeUpdate("DELETE FROM PEOPLE WHERE ID IN(:ids)");           // :ids is a named parameter
+            int affectedRecordCount = cs.executeUpdate("DELETE FROM PEOPLE WHERE ID IN(:ids)".replace(":ids", ids));// :ids is a named parameter
+            System.out.println(affectedRecordCount);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
