@@ -109,9 +109,18 @@ public class PeopleRepository {
 
     }
 
+//    public void delete(Person...people) {
+//        for(Person person : people){
+//            delete(person);
+//        }
+//    }
+
     public void delete(Person...people) {
-        for(Person person : people){
-            delete(person);
+        try {
+            Statement cs = connection.createStatement();
+            cs.executeUpdate("DELETE FROM PEOPLE WHERE ID IN(?,?,?,?");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
