@@ -7,8 +7,11 @@ import java.sql.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.joining;
 
 public class PeopleRepository {
 
@@ -118,7 +121,13 @@ public class PeopleRepository {
     public void delete(Person...people) {
         try {
             Statement cs = connection.createStatement();
-            cs.executeUpdate("DELETE FROM PEOPLE WHERE ID IN(?,?,?,?");
+
+            String ids = Arrays.stream(people)
+                    .map(person -> person.getId())
+                    .map(id -> String.valueOf(id))
+                    .collect(joining(","));
+
+            cs.executeUpdate("DELETE FROM PEOPLE WHERE ID IN(:ids)");           // :ids is a named parameter
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
