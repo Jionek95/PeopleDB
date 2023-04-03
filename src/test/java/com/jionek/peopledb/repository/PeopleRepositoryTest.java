@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,6 +124,9 @@ public class PeopleRepositoryTest {
         Person p4 = new Person(40L, null, null, null);
         Person p5 = new Person(50L, null, null, null);
 
+        // DELETE FROM PEOPLE WHERE ID IN (10, 20,30,40,50);
+
+    Arrays.asList(p1, p2, p3, p4, p5).toArray(new Person[]{});
 }
 
 
