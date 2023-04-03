@@ -15,7 +15,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PeopleRepositoryTest {
@@ -126,7 +128,12 @@ public class PeopleRepositoryTest {
 
         // DELETE FROM PEOPLE WHERE ID IN (10, 20,30,40,50);
 
-    Arrays.asList(p1, p2, p3, p4, p5).toArray(new Person[]{});
+    Person[] people = Arrays.asList(p1, p2, p3, p4, p5).toArray(new Person[]{});
+    String ids = Arrays.stream(people)
+            .map(person -> person.getId())
+            .map(id -> String.valueOf(id))
+            .collect(joining(","));
+    System.out.println(ids);
 }
 
 
