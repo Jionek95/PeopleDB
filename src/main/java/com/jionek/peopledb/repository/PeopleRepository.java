@@ -27,7 +27,7 @@ public class PeopleRepository {
             PreparedStatement ps = connection.prepareStatement(SAVE_PERSON_SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, person.getFirstName());
             ps.setString(2, person.getLastName());
-            ps.setTimestamp(3, Timestamp.valueOf(person.getDob().withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime()));
+            ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
             int recordsAffected = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             while (rs.next()){
@@ -41,6 +41,10 @@ public class PeopleRepository {
             throw new UnableToSaveException("Tried to save person: " + person);
         }
         return person;
+    }
+
+    private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
+        return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
     }
 
 
@@ -158,6 +162,15 @@ public class PeopleRepository {
     }
 
     public void update(Person person) {
+//        System.out.println(person);
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE PEOPLE SET FIRST_NAME=?, LAST_NAME=?, DOB=?, SALARY=? WHERE ID=?");
+            ps.setString(1, person.getFirstName());
+            ps.setString(2, person.getLastName());
+            ps.setTimestamp();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }
