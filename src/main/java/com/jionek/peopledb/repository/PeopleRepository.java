@@ -157,7 +157,7 @@ public class PeopleRepository {
         }
     }
 
-    public void update(Person foundPerson) {
+    public void update(Person person) {
 
     }
 }
