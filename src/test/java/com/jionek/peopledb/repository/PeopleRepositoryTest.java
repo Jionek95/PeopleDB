@@ -145,6 +145,10 @@ public class PeopleRepositoryTest {
 
         foundPerson.setSalary(new BigDecimal("73000.34"));
         repo.update(foundPerson);
+
+        Person foundPerson2 = repo.findById(foundPerson.getId()).get();
+
+        assertThat(foundPerson.getSalary()).isNotEqualByComparingTo(foundPerson2.getSalary());
     }
 
 }
