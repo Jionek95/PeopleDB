@@ -44,27 +44,26 @@ public class PeopleRepository {
     }
 
 
-    public Optional<Person> findById(Person person) {
-//        Person person = null;
-
-        try {
-            PreparedStatement ps = connection.prepareStatement("SELECT ID, FIRST_NAME, LAST_NAME, DOB FROM PEOPLE WHERE ID=?");
-            ps.setLong(1, person.getId());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()){
-                long personId = rs.getLong("ID");
-                String firstName = rs.getString("FIRST_NAME");
-                String lastName = rs.getString("LAST_NAME");
-                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
-                person = new Person(firstName, lastName, dob);
-                person.setId(personId);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return Optional.ofNullable(person);
-    }
+//    public Optional<Person> findById(Person person) {
+//
+//        try {
+//            PreparedStatement ps = connection.prepareStatement("SELECT ID, FIRST_NAME, LAST_NAME, DOB FROM PEOPLE WHERE ID=?");
+//            ps.setLong(1, person.getId());
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()){
+//                long personId = rs.getLong("ID");
+//                String firstName = rs.getString("FIRST_NAME");
+//                String lastName = rs.getString("LAST_NAME");
+//                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
+//                person = new Person(firstName, lastName, dob);
+//                person.setId(personId);
+//            }
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return Optional.ofNullable(person);
+//    }
 
     public Optional<Person> findById(Long id ) {
         Person person = null;
