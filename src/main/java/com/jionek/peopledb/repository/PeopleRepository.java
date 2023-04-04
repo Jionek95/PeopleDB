@@ -43,10 +43,6 @@ public class PeopleRepository {
         return person;
     }
 
-    private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
-        return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
-    }
-
 
     public Optional<Person> findById(Person person) {
 //        Person person = null;
@@ -167,10 +163,16 @@ public class PeopleRepository {
             PreparedStatement ps = connection.prepareStatement("UPDATE PEOPLE SET FIRST_NAME=?, LAST_NAME=?, DOB=?, SALARY=? WHERE ID=?");
             ps.setString(1, person.getFirstName());
             ps.setString(2, person.getLastName());
-            ps.setTimestamp();
+            ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
+            ps.setBigDecimal(4, person.getSalary());
+            ps.setLong(5, person.getId());
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
+        return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
     }
 }
