@@ -12,12 +12,12 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.joining;
+//import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PeopleRepositoryTest {
@@ -118,23 +118,22 @@ public class PeopleRepositoryTest {
         long endCount = repo.count();
         assertThat(endCount).isEqualTo(startCount - 2);
     }
-@Test
-    public void experiment(){
-        Person p1 = new Person(10L, null, null, null);
-        Person p2 = new Person(20L, null, null, null);
-        Person p3 = new Person(30L, null, null, null);
-        Person p4 = new Person(40L, null, null, null);
-        Person p5 = new Person(50L, null, null, null);
-
-        // DELETE FROM PEOPLE WHERE ID IN (10, 20,30,40,50);
-
-    Person[] people = Arrays.asList(p1, p2, p3, p4, p5).toArray(new Person[]{});
-    String ids = Arrays.stream(people)
-            .map(person -> person.getId())
-            .map(id -> String.valueOf(id))
-            .collect(joining(","));
-    System.out.println(ids);
-}
+//@Test
+//    public void experiment(){
+//        Person p1 = new Person(10L, null, null, null);
+//        Person p2 = new Person(20L, null, null, null);
+//        Person p3 = new Person(30L, null, null, null);
+//        Person p4 = new Person(40L, null, null, null);
+//        Person p5 = new Person(50L, null, null, null);
+//
+//        // DELETE FROM PEOPLE WHERE ID IN (10, 20,30,40,50);
+//    Person[] people = Arrays.asList(p1, p2, p3, p4, p5).toArray(new Person[]{});
+//    String ids = Arrays.stream(people)
+//            .map(person -> person.getId())
+//            .map(id -> String.valueOf(id))
+//            .collect(joining(","));
+//    System.out.println(ids);
+//}
 
 
 }
