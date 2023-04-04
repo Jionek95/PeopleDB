@@ -13,6 +13,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 //import java.util.Arrays;
+//import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 //import java.util.stream.Collectors;
@@ -128,6 +129,7 @@ public class PeopleRepositoryTest {
 //
 //        // DELETE FROM PEOPLE WHERE ID IN (10, 20,30,40,50);
 //    Person[] people = Arrays.asList(p1, p2, p3, p4, p5).toArray(new Person[]{});
+////    Person[] people = {p1,p2,p3,p4,p5};
 //    String ids = Arrays.stream(people)
 //            .map(person -> person.getId())
 //            .map(id -> String.valueOf(id))
