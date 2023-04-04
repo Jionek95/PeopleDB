@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -66,7 +67,7 @@ public class PeopleRepositoryTest {
    @Test
     public void canFindPersonById(){
        Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)));
-       Person foundPerson = repo.findById(savedPerson.getId()).get();
+       Person foundPerson = repo.findById(savedPerson).get();
        assertThat(foundPerson).isEqualTo(savedPerson);
    }
     @Test
@@ -137,5 +138,13 @@ public class PeopleRepositoryTest {
 //    System.out.println(ids);
 //}
 
+    @Test
+    public void canUpdate(){
+        Person savedPerson = repo.save(new Person("John1", "Smith", ZonedDateTime.of(1980, 11, 15, 15, 15, 0, 0, ZoneId.of("-6"))));
+        Person foundPerson = repo.findById(savedPerson.getId()).get();
+
+        foundPerson.setSalary(new BigDecimal("73000.34"));
+        repo.update(foundPerson);
+    }
 
 }
