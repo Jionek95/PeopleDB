@@ -1,5 +1,6 @@
 package com.jionek.peopledb.model;
 
+import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -9,6 +10,9 @@ public class Person {
     private String firstName;
     private String lastName;
     private ZonedDateTime dob;
+
+    private BigDecimal salary;
+
     public Person (String firstName, String lastName, ZonedDateTime dob) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -52,6 +56,14 @@ public class Person {
 
     public void setDob(ZonedDateTime dob) {
         this.dob = dob;
+    }
+
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
     }
 
     @Override
