@@ -3,6 +3,7 @@ package com.jionek.peopledb.repository;
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Person;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -17,7 +18,7 @@ public class PeopleRepository {
 
 //    public static List<Person> people;
     public static final String SAVE_PERSON_SQL = "INSERT INTO PEOPLE (FIRST_NAME, LAST_NAME, DOB) VALUES(?, ?, ?)";
-    public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB FROM PEOPLE WHERE ID=?";
+    public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB, SALARY FROM PEOPLE WHERE ID=?";
     public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
     private Connection connection;
 
@@ -76,19 +77,14 @@ public class PeopleRepository {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                long personId = rs.getLong("ID");
-                String firstName = rs.getString("FIRST_NAME");
-                String lastName = rs.getString("LAST_NAME");
-                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
-                person = new Person(firstName, lastName, dob);
-                person.setId(personId);
+                person = extractPersonFromResultSet(rs);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return Optional.ofNullable(person);
     }
+
 
     public List<Person> findAll(){
         List<Person> people = new ArrayList<>();
@@ -176,5 +172,14 @@ public class PeopleRepository {
 
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
         return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
+    }
+
+    private static Person extractPersonFromResultSet(ResultSet rs) throws SQLException {
+        long personId = rs.getLong("ID");
+        String firstName = rs.getString("FIRST_NAME");
+        String lastName = rs.getString("LAST_NAME");
+        ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
+        BigDecimal salary = rs.getBigDecimal("SALARY");
+        return new Person(personId, firstName, lastName, dob, salary);
     }
 }
