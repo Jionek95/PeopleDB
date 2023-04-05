@@ -129,8 +129,6 @@ public class PeopleRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
 //    public void delete(Person...people) {
