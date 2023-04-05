@@ -17,7 +17,10 @@ public class PeopleRepository {
 
 //    public static List<Person> people;
     public static final String SAVE_PERSON_SQL = "INSERT INTO PEOPLE (FIRST_NAME, LAST_NAME, DOB) VALUES(?, ?, ?)";
+    public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB FROM PEOPLE WHERE ID=?";
+    public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
     private Connection connection;
+
     public PeopleRepository(Connection connection) {
         this.connection = connection;
     }
@@ -47,7 +50,7 @@ public class PeopleRepository {
     public Optional<Person> findById(Person person) {
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT ID, FIRST_NAME, LAST_NAME, DOB FROM PEOPLE WHERE ID=?");
+            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
             ps.setLong(1, person.getId());
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
@@ -69,7 +72,7 @@ public class PeopleRepository {
         Person person = null;
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT ID, FIRST_NAME, LAST_NAME, DOB FROM PEOPLE WHERE ID=?");
+            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
@@ -91,7 +94,7 @@ public class PeopleRepository {
         List<Person> people = new ArrayList<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM PEOPLE");
+            PreparedStatement ps = connection.prepareStatement(FIND_ALL_SQL);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
 //                long personId = rs.getLong("ID");
