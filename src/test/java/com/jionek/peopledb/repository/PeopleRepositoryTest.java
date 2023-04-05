@@ -149,7 +149,7 @@ public class PeopleRepositoryTest {
 
         Person p2 = repo.findById(savedPerson.getId()).get();
 
-        assertThat(p1.getSalary()).isNotEqualByComparingTo(p2.getSalary());
+        assertThat(p1.getSalary()).isNotEqualTo(p2.getSalary());
     }
 
 }
