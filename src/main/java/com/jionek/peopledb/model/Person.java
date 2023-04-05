@@ -20,10 +20,13 @@ public class Person {
     }
 
     public Person(Long id, String firstName, String lastName, ZonedDateTime dob) {
+        this(firstName, lastName, dob);
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dob = dob;
+    }
+
+    public Person(Long id, String firstName, String lastName, ZonedDateTime dob, BigDecimal salary) {
+        this(id, firstName, lastName, dob);
+        this.salary = salary;
     }
 
     public Long getId() {
