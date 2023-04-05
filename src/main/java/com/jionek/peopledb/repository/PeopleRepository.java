@@ -155,17 +155,17 @@ public class PeopleRepository {
 
     public void update(Person person) {
 //        System.out.println(person);
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("UPDATE PEOPLE SET FIRST_NAME=?, LAST_NAME=?, DOB=?, SALARY=? WHERE ID=?");
-//            ps.setString(1, person.getFirstName());
-//            ps.setString(2, person.getLastName());
-//            ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
-//            ps.setBigDecimal(4, person.getSalary());
-//            ps.setLong(5, person.getId());
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE PEOPLE SET FIRST_NAME=?, LAST_NAME=?, DOB=?, SALARY=? WHERE ID=?");
+            ps.setString(1, person.getFirstName());
+            ps.setString(2, person.getLastName());
+            ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
+            ps.setBigDecimal(4, person.getSalary());
+            ps.setLong(5, person.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
