@@ -22,7 +22,12 @@ public class PeopleRepository extends CRUDRepository<Person> {
     private Connection connection;
 
     public PeopleRepository(Connection connection) {
-        this.connection = connection;
+        super(connection);
+    }
+
+    @Override
+    String getSaveSql() {
+        return SAVE_PERSON_SQL;
     }
 
     public Person save(Person person) throws UnableToSaveException{
@@ -45,7 +50,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
         }
         return person;
     }
-
 
     public Optional<Person> findById(Person person) {
 
