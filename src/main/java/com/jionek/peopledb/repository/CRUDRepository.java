@@ -1,14 +1,16 @@
 package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.exception.UnableToSaveException;
-import com.jionek.peopledb.model.Person;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class CRUDRepository <T> {
+    protected Connection connection;
+
+    public CRUDRepository(Connection connection) {
+        this.connection = connection;
+    }
+
     public T save(T person) throws UnableToSaveException {
         try {
             PreparedStatement ps = connection.prepareStatement(SAVE_PERSON_SQL, Statement.RETURN_GENERATED_KEYS);
