@@ -16,7 +16,6 @@ import static java.util.stream.Collectors.joining;
 
 public class PeopleRepository {
 
-//    public static List<Person> people;
     public static final String SAVE_PERSON_SQL = "INSERT INTO PEOPLE (FIRST_NAME, LAST_NAME, DOB) VALUES(?, ?, ?)";
     public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB, SALARY FROM PEOPLE WHERE ID=?";
     public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
@@ -154,7 +153,6 @@ public class PeopleRepository {
     }
 
     public void update(Person person) {
-//        System.out.println(person);
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE PEOPLE SET FIRST_NAME=?, LAST_NAME=?, DOB=?, SALARY=? WHERE ID=?");
             ps.setString(1, person.getFirstName());
