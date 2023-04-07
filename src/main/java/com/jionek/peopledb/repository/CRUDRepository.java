@@ -14,9 +14,7 @@ abstract class CRUDRepository <T> {
     public T save(T person) throws UnableToSaveException {
         try {
             PreparedStatement ps = connection.prepareStatement(getSaveSql(), Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, person.getFirstName());
-            ps.setString(2, person.getLastName());
-            ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
+            mapForSave(person, ps);
             int recordsAffected = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             while (rs.next()){
@@ -31,6 +29,9 @@ abstract class CRUDRepository <T> {
         }
         return person;
     }
+
+    abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
+
     abstract String getSaveSql();
 
     }
