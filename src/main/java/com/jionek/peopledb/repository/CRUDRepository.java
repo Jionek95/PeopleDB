@@ -4,7 +4,7 @@ import com.jionek.peopledb.exception.UnableToSaveException;
 
 import java.sql.*;
 
-public class CRUDRepository <T> {
+abstract class CRUDRepository <T> {
     protected Connection connection;
 
     public CRUDRepository(Connection connection) {
@@ -13,7 +13,7 @@ public class CRUDRepository <T> {
 
     public T save(T person) throws UnableToSaveException {
         try {
-            PreparedStatement ps = connection.prepareStatement(SAVE_PERSON_SQL, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(getSaveSql(), Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, person.getFirstName());
             ps.setString(2, person.getLastName());
             ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
@@ -31,4 +31,6 @@ public class CRUDRepository <T> {
         }
         return person;
     }
-}
+    abstract String getSaveSql();
+
+    }
