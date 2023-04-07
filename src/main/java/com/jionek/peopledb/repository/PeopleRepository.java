@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.joining;
 
-public class PeopleRepository {
+public class PeopleRepository extends CRUDRepository<Person> {
 
     public static final String SAVE_PERSON_SQL = "INSERT INTO PEOPLE (FIRST_NAME, LAST_NAME, DOB) VALUES(?, ?, ?)";
     public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB, SALARY FROM PEOPLE WHERE ID=?";
