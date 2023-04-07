@@ -30,29 +30,29 @@ public class PeopleRepository extends CRUDRepository<Person> {
     }
 
     @Override
-    void mapForSave(Person entity, PreparedStatement ps) throws SQLException {
+    void mapForSave(Person person, PreparedStatement ps) throws SQLException {
 
     }
 
-    public Person save(Person entity) throws UnableToSaveException{
+    public Person save(Person person) throws UnableToSaveException{
         try {
             PreparedStatement ps = connection.prepareStatement(SAVE_PERSON_SQL, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, entity.getFirstName());
-            ps.setString(2, entity.getLastName());
-            ps.setTimestamp(3, convertDobToTimestamp(entity.getDob()));
+            ps.setString(1, person.getFirstName());
+            ps.setString(2, person.getLastName());
+            ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
             int recordsAffected = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             while (rs.next()){
                 long id = rs.getLong(1);
-                entity.setId(id);
-                System.out.println(entity);
+                person.setId(id);
+                System.out.println(person);
             }
             System.out.printf("Records affected: %d%n", recordsAffected);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new UnableToSaveException("Tried to save person: " + entity);
+            throw new UnableToSaveException("Tried to save person: " + person);
         }
-        return entity;
+        return person;
     }
 
     public Optional<Person> findById(Person person) {
