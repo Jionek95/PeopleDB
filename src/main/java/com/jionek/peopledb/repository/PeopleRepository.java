@@ -19,7 +19,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
     public static final String SAVE_PERSON_SQL = "INSERT INTO PEOPLE (FIRST_NAME, LAST_NAME, DOB) VALUES(?, ?, ?)";
     public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB, SALARY FROM PEOPLE WHERE ID=?";
     public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
-    private Connection connection;
+//    private Connection connection;
 
     public PeopleRepository(Connection connection) {
         super(connection);
