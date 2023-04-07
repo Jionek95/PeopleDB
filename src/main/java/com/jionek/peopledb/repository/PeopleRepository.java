@@ -19,7 +19,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
     public static final String SAVE_PERSON_SQL = "INSERT INTO PEOPLE (FIRST_NAME, LAST_NAME, DOB) VALUES(?, ?, ?)";
     public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB, SALARY FROM PEOPLE WHERE ID=?";
     public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
-//    private Connection connection;
 
     public PeopleRepository(Connection connection) {
         super(connection);
@@ -30,25 +29,30 @@ public class PeopleRepository extends CRUDRepository<Person> {
         return SAVE_PERSON_SQL;
     }
 
-    public Person save(Person person) throws UnableToSaveException{
+    @Override
+    void mapForSave(Person entity, PreparedStatement ps) throws SQLException {
+
+    }
+
+    public Person save(Person entity) throws UnableToSaveException{
         try {
             PreparedStatement ps = connection.prepareStatement(SAVE_PERSON_SQL, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, person.getFirstName());
-            ps.setString(2, person.getLastName());
-            ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
+            ps.setString(1, entity.getFirstName());
+            ps.setString(2, entity.getLastName());
+            ps.setTimestamp(3, convertDobToTimestamp(entity.getDob()));
             int recordsAffected = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             while (rs.next()){
                 long id = rs.getLong(1);
-                person.setId(id);
-                System.out.println(person);
+                entity.setId(id);
+                System.out.println(entity);
             }
             System.out.printf("Records affected: %d%n", recordsAffected);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new UnableToSaveException("Tried to save person: " + person);
+            throw new UnableToSaveException("Tried to save person: " + entity);
         }
-        return person;
+        return entity;
     }
 
     public Optional<Person> findById(Person person) {
