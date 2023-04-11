@@ -2,8 +2,12 @@ package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Entity;
+import com.jionek.peopledb.model.Person;
 
 import java.sql.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Optional;
 
 abstract class CRUDRepository <T extends Entity> {
     protected Connection connection;
@@ -29,6 +33,27 @@ abstract class CRUDRepository <T extends Entity> {
             throw new UnableToSaveException("Tried to save person: " + entity);
         }
         return entity;
+    }
+
+    public Optional<Person> findById(Person person) {
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
+            ps.setLong(1, person.getId());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                long personId = rs.getLong("ID");
+                String firstName = rs.getString("FIRST_NAME");
+                String lastName = rs.getString("LAST_NAME");
+                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
+                person = new Person(firstName, lastName, dob);
+                person.setId(personId);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return Optional.ofNullable(person);
     }
 
     abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
