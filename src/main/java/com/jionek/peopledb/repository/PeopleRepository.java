@@ -50,6 +50,10 @@ public class PeopleRepository extends CRUDRepository<Person> {
         return FIND_BY_ID_SQL;
     }
 
+    @Override
+    protected String getFindAllSql() {
+        return FIND_ALL_SQL;
+    }
 
     /** OVERLOADED METHOD findById(Person person)
 //    public Optional<Person> findById(Person person) {
