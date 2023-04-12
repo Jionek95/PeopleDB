@@ -66,8 +66,8 @@ public class PeopleRepositoryTest {
    }
    @Test
     public void canFindPersonById(){
-       Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)));
-       Person foundPerson = repo.findById(savedPerson).get();
+       Person savedPerson = repo.save(new Person(2L,"test", "jackson", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)));
+       Person foundPerson = repo.findById(savedPerson.getId()).get();
        assertThat(foundPerson).isEqualTo(savedPerson);
    }
     @Test
