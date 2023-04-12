@@ -16,6 +16,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
     public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB, SALARY FROM PEOPLE WHERE ID=?";
     public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
     public static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM PEOPLE";
+    public static final String DELETE_SQL = "DELETE FROM PEOPLE WHERE ID=?";
 
     public PeopleRepository(Connection connection) {
         super(connection);
@@ -58,6 +59,11 @@ public class PeopleRepository extends CRUDRepository<Person> {
         return SELECT_COUNT_SQL;
     }
 
+    @Override
+    protected String getDeleteSQL() {
+        return DELETE_SQL;
+    }
+
     /** OVERLOADED METHOD findById(Person person)
 //    public Optional<Person> findById(Person person) {
 //
@@ -81,17 +87,16 @@ public class PeopleRepository extends CRUDRepository<Person> {
 //    }
      **/
 
-
-    public void delete(Person person) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM PEOPLE WHERE ID=?");
-            ps.setLong(1, person.getId());
-            int recordsAffected = ps.executeUpdate();
-            System.out.println(recordsAffected);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public void delete(Person entity) {
+//        try {
+//            PreparedStatement ps = connection.prepareStatement(DELETE_SQL);
+//            ps.setLong(1, entity.getId());
+//            int recordsAffected = ps.executeUpdate();
+//            System.out.println(recordsAffected);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     /** SLOWER VERSION OF delete(Person...people)
 //    public void delete(Person...people) {
