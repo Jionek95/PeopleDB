@@ -2,8 +2,11 @@ package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Entity;
+import com.jionek.peopledb.model.Person;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 abstract class CRUDRepository <T extends Entity> {
@@ -47,6 +50,23 @@ abstract class CRUDRepository <T extends Entity> {
         }
         return Optional.ofNullable(entity);
     }
+
+    public List<T> findAll() {
+        List<T> entities = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(getFindAllSql());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                entities.add(extractEntityFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return entities;
+    }
+
+    protected abstract String getFindAllSql();
 
     abstract T extractEntityFromResultSet(ResultSet rs) throws SQLException;
 
