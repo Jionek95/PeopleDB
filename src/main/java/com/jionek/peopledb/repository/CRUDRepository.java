@@ -2,7 +2,6 @@ package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Entity;
-import com.jionek.peopledb.model.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
