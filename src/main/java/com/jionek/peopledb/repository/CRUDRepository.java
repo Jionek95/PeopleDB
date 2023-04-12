@@ -2,6 +2,7 @@ package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Entity;
+import com.jionek.peopledb.model.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -79,6 +80,19 @@ abstract class CRUDRepository <T extends Entity> {
         }
         return count;
     }
+
+    public void delete(T entity) {
+        try {
+            PreparedStatement ps = connection.prepareStatement(getDeleteSQL());
+            ps.setLong(1, entity.getId());
+            int recordsAffected = ps.executeUpdate();
+            System.out.println(recordsAffected);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected abstract String getDeleteSQL();
 
     protected abstract String getCountSql();
 
