@@ -35,21 +35,21 @@ abstract class CRUDRepository <T extends Entity> {
         return entity;
     }
 
-    public Optional<Person> findById(Long id ) {
-        Person person = null;
-
-        try {
-            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
-            ps.setLong(1, id);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()){
-                person = extractPersonFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return Optional.ofNullable(person);
-    }
+//    public Optional<Person> findById(Long id ) {
+//        Person person = null;
+//
+//        try {
+//            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
+//            ps.setLong(1, id);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()){
+//                person = extractPersonFromResultSet(rs);
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return Optional.ofNullable(person);
+//    }
 
     abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
 
