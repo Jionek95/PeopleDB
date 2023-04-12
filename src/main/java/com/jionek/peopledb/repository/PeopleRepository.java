@@ -1,6 +1,5 @@
 package com.jionek.peopledb.repository;
 
-import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Person;
 
 import java.math.BigDecimal;
@@ -36,60 +35,55 @@ public class PeopleRepository extends CRUDRepository<Person> {
         ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
     }
 
-    /** COULD BE DELETED
-    public Person save(Person person) throws UnableToSaveException{
-        try {
-            PreparedStatement ps = connection.prepareStatement(SAVE_PERSON_SQL, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, person.getFirstName());
-            ps.setString(2, person.getLastName());
-            ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
-            int recordsAffected = ps.executeUpdate();
-            ResultSet rs = ps.getGeneratedKeys();
-            while (rs.next()){
-                long id = rs.getLong(1);
-                person.setId(id);
-                System.out.println(person);
-            }
-            System.out.printf("Records affected: %d%n", recordsAffected);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new UnableToSaveException("Tried to save person: " + person);
-        }
-        return person;
+    @Override
+    Person extractEntityFromResultSet(ResultSet rs) throws SQLException {
+        long personId = rs.getLong("ID");
+        String firstName = rs.getString("FIRST_NAME");
+        String lastName = rs.getString("LAST_NAME");
+        ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
+        BigDecimal salary = rs.getBigDecimal("SALARY");
+        return new Person(personId, firstName, lastName, dob, salary);
     }
+
+    @Override
+    String getfindByIdSql() {
+        return null;
+    }
+
+
+    /** OVERLOADED METHOD findById(Person person)
+//    public Optional<Person> findById(Person person) {
+//
+//        try {
+//            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
+//            ps.setLong(1, person.getId());
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                long personId = rs.getLong("ID");
+//                String firstName = rs.getString("FIRST_NAME");
+//                String lastName = rs.getString("LAST_NAME");
+//                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
+//                person = new Person(firstName, lastName, dob);
+//                person.setId(personId);
+//            }
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return Optional.ofNullable(person);
+//    }
 
      **/
 
-    public Optional<Person> findById(Person person) {
-
-        try {
-            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
-            ps.setLong(1, person.getId());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()){
-                long personId = rs.getLong("ID");
-                String firstName = rs.getString("FIRST_NAME");
-                String lastName = rs.getString("LAST_NAME");
-                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
-                person = new Person(firstName, lastName, dob);
-                person.setId(personId);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return Optional.ofNullable(person);
-    }
-
-    public Optional<Person> findById(Long id ) {
+    public Optional<Person> findById(Long id) {
         Person person = null;
 
         try {
             PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
-                person = extractPersonFromResultSet(rs);
+            while (rs.next()) {
+                person = extractEntityFromResultSet(rs);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -98,18 +92,18 @@ public class PeopleRepository extends CRUDRepository<Person> {
     }
 
 
-    public List<Person> findAll(){
+    public List<Person> findAll() {
         List<Person> people = new ArrayList<>();
 
         try {
             PreparedStatement ps = connection.prepareStatement(FIND_ALL_SQL);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
 //                long personId = rs.getLong("ID");
                 String firstName = rs.getString("FIRST_NAME");
                 String lastName = rs.getString("LAST_NAME");
                 ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
-                people.add(new Person(firstName, lastName,dob));
+                people.add(new Person(firstName, lastName, dob));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -117,13 +111,14 @@ public class PeopleRepository extends CRUDRepository<Person> {
         return people;
     }
 
+
     public long count() {
         long count = 0;
 
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) FROM PEOPLE");
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 count = rs.getLong(1);
             }
         } catch (SQLException e) {
@@ -149,7 +144,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
 //        }
 //    }
 
-    public void delete(Person...people) {
+    public void delete(Person... people) {
         try {
             Statement cs = connection.createStatement();
 
@@ -182,13 +177,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
         return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
     }
-
-    private static Person extractPersonFromResultSet(ResultSet rs) throws SQLException {
-        long personId = rs.getLong("ID");
-        String firstName = rs.getString("FIRST_NAME");
-        String lastName = rs.getString("LAST_NAME");
-        ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
-        BigDecimal salary = rs.getBigDecimal("SALARY");
-        return new Person(personId, firstName, lastName, dob, salary);
-    }
 }
+
+
