@@ -21,10 +21,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
         super(connection);
     }
 
-    @Override
-    String getSaveSql() {
-        return SAVE_PERSON_SQL;
-    }
 
     @Override
     void mapForSave(Person person, PreparedStatement ps) throws SQLException {
@@ -32,7 +28,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
         ps.setString(2, person.getLastName());
         ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
     }
-
     @Override
     Person extractEntityFromResultSet(ResultSet rs) throws SQLException {
         long personId = rs.getLong("ID");
@@ -42,37 +37,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
         BigDecimal salary = rs.getBigDecimal("SALARY");
         return new Person(personId, firstName, lastName, dob, salary);
     }
-
-    @Override
-    String getfindByIdSql() {
-        return FIND_BY_ID_SQL;
-    }
-
-    @Override
-    protected String getFindAllSql() {
-        return FIND_ALL_SQL;
-    }
-
-    @Override
-    protected String getCountSql() {
-        return SELECT_COUNT_SQL;
-    }
-
-    @Override
-    protected String getDeleteSQL() {
-        return DELETE_SQL;
-    }
-
-    @Override
-    protected String getDeleteInSql() {
-        return DELETE_IN_SQL;
-    }
-
-    @Override
-    protected String getUpdateSQL() {
-        return UPDATE_SQL;
-    }
-
     @Override
     void mapForUpdate(Person entity, PreparedStatement ps) throws SQLException {
         ps.setString(1, entity.getFirstName());
@@ -80,6 +44,40 @@ public class PeopleRepository extends CRUDRepository<Person> {
         ps.setTimestamp(3, convertDobToTimestamp(entity.getDob()));
         ps.setBigDecimal(4, entity.getSalary());
     }
+
+    @Override
+    String getSaveSql() {
+        return SAVE_PERSON_SQL;
+    }
+    @Override
+    String getfindByIdSql() {
+        return FIND_BY_ID_SQL;
+    }
+    @Override
+    protected String getFindAllSql() {
+        return FIND_ALL_SQL;
+    }
+    @Override
+    protected String getCountSql() {
+        return SELECT_COUNT_SQL;
+    }
+    @Override
+    protected String getDeleteSQL() {
+        return DELETE_SQL;
+    }
+    @Override
+    protected String getDeleteInSql() {
+        return DELETE_IN_SQL;
+    }
+    @Override
+    protected String getUpdateSQL() {
+        return UPDATE_SQL;
+    }
+
+    private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
+        return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
+    }
+
     /** OVERLOADED METHOD findById(Person person)
 //    public Optional<Person> findById(Person person) {
 //
@@ -113,9 +111,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
      **/
 
 
-    private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
-        return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
-    }
+
 }
 
 
