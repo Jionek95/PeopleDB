@@ -47,7 +47,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
 
     @Override
     String getfindByIdSql() {
-        return FIND_ALL_SQL;
+        return FIND_BY_ID_SQL;
     }
 
 
