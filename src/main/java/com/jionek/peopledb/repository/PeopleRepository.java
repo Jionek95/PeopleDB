@@ -17,6 +17,8 @@ public class PeopleRepository extends CRUDRepository<Person> {
     public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
     public static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM PEOPLE";
     public static final String DELETE_SQL = "DELETE FROM PEOPLE WHERE ID=?";
+    public static final String DELETE_IN_SQL = "DELETE FROM PEOPLE WHERE ID IN(:ids)";
+    public static final String UPDATE_SQL = "UPDATE PEOPLE SET FIRST_NAME=?, LAST_NAME=?, DOB=?, SALARY=? WHERE ID=?";
 
     public PeopleRepository(Connection connection) {
         super(connection);
@@ -64,6 +66,23 @@ public class PeopleRepository extends CRUDRepository<Person> {
         return DELETE_SQL;
     }
 
+    @Override
+    protected String getDeleteInSql() {
+        return DELETE_IN_SQL;
+    }
+
+    @Override
+    protected String getUpdateSQL() {
+        return UPDATE_SQL;
+    }
+
+    @Override
+    void mapForUpdate(Person entity, PreparedStatement ps) throws SQLException {
+        ps.setString(1, entity.getFirstName());
+        ps.setString(2, entity.getLastName());
+        ps.setTimestamp(3, convertDobToTimestamp(entity.getDob()));
+        ps.setBigDecimal(4, entity.getSalary());
+    }
     /** OVERLOADED METHOD findById(Person person)
 //    public Optional<Person> findById(Person person) {
 //
@@ -87,16 +106,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
 //    }
      **/
 
-//    public void delete(Person entity) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(DELETE_SQL);
-//            ps.setLong(1, entity.getId());
-//            int recordsAffected = ps.executeUpdate();
-//            System.out.println(recordsAffected);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     /** SLOWER VERSION OF delete(Person...people)
 //    public void delete(Person...people) {
@@ -106,35 +115,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
 //    }
      **/
 
-    public void delete(Person... people) {
-        try {
-            Statement cs = connection.createStatement();
-
-            String ids = Arrays.stream(people)
-                    .map(person -> person.getId())
-                    .map(id -> String.valueOf(id))
-                    .collect(joining(","));
-
-            int affectedRecordCount = cs.executeUpdate("DELETE FROM PEOPLE WHERE ID IN(:ids)".replace(":ids", ids));// :ids is a named parameter
-            System.out.println(affectedRecordCount);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void update(Person person) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE PEOPLE SET FIRST_NAME=?, LAST_NAME=?, DOB=?, SALARY=? WHERE ID=?");
-            ps.setString(1, person.getFirstName());
-            ps.setString(2, person.getLastName());
-            ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
-            ps.setBigDecimal(4, person.getSalary());
-            ps.setLong(5, person.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
         return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
