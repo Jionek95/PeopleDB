@@ -111,19 +111,28 @@ abstract class CRUDRepository <T extends Entity> {
         }
     }
 
+    public void update(T entity) {
+        try {
+            PreparedStatement ps = connection.prepareStatement(getUpdateSQL());
+            mapForUpdate(entity, ps);
+            ps.setLong(5, entity.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected abstract String getUpdateSQL();
+
     /**
      *
      * @return Should return SQL String like:
      * "DELETE FROM PEOPLE WHERE ID IN(:ids)"
      */
     protected abstract String getDeleteInSql();
-
     protected abstract String getDeleteSQL();
-
     protected abstract String getCountSql();
-
     protected abstract String getFindAllSql();
-
     abstract T extractEntityFromResultSet(ResultSet rs) throws SQLException;
 
     /**
@@ -132,9 +141,8 @@ abstract class CRUDRepository <T extends Entity> {
      * The SQL must contain one SQL parameter, i.e. "?" that will bind to the entity's ID.
      */
     abstract String getfindByIdSql();
-
     abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
-
+    abstract void mapForUpdate(T entity, PreparedStatement ps) throws SQLException;
     abstract String getSaveSql();
 
     }
