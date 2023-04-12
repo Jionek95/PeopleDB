@@ -36,7 +36,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
         ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
     }
 
-    @Override
+    /** COULD BE DELETED
     public Person save(Person person) throws UnableToSaveException{
         try {
             PreparedStatement ps = connection.prepareStatement(SAVE_PERSON_SQL, Statement.RETURN_GENERATED_KEYS);
@@ -57,6 +57,8 @@ public class PeopleRepository extends CRUDRepository<Person> {
         }
         return person;
     }
+
+     **/
 
     public Optional<Person> findById(Person person) {
 
