@@ -6,8 +6,11 @@ import com.jionek.peopledb.model.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.joining;
 
 abstract class CRUDRepository <T extends Entity> {
     protected Connection connection;
@@ -91,6 +94,29 @@ abstract class CRUDRepository <T extends Entity> {
             throw new RuntimeException(e);
         }
     }
+
+    public void delete(T... entities) {
+        try {
+            Statement cs = connection.createStatement();
+
+            String ids = Arrays.stream(entities)
+                    .map(entity -> entity.getId())
+                    .map(id -> String.valueOf(id))
+                    .collect(joining(","));
+
+            int affectedRecordCount = cs.executeUpdate(getDeleteInSql().replace(":ids", ids));// :ids is a named parameter
+            System.out.println(affectedRecordCount);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     *
+     * @return Should return SQL String like:
+     * "DELETE FROM PEOPLE WHERE ID IN(:ids)"
+     */
+    protected abstract String getDeleteInSql();
 
     protected abstract String getDeleteSQL();
 
