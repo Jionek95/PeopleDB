@@ -35,21 +35,16 @@ abstract class CRUDRepository <T extends Entity> {
         return entity;
     }
 
-    public Optional<Person> findById(Person person) {
+    public Optional<Person> findById(Long id ) {
+        Person person = null;
 
         try {
             PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
-            ps.setLong(1, person.getId());
+            ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                long personId = rs.getLong("ID");
-                String firstName = rs.getString("FIRST_NAME");
-                String lastName = rs.getString("LAST_NAME");
-                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
-                person = new Person(firstName, lastName, dob);
-                person.setId(personId);
+                person = extractPersonFromResultSet(rs);
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
