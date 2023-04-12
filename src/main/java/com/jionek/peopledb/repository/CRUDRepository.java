@@ -35,21 +35,30 @@ abstract class CRUDRepository <T extends Entity> {
         return entity;
     }
 
-//    public Optional<Person> findById(Long id ) {
-//        Person person = null;
-//
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
-//            ps.setLong(1, id);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()){
-//                person = extractPersonFromResultSet(rs);
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return Optional.ofNullable(person);
-//    }
+    public Optional<T> findById(Long id ) {
+        T entity = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(getfindByIdSql());
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                entity = extractEntityFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return Optional.ofNullable(entity);
+    }
+
+    abstract T extractEntityFromResultSet(ResultSet rs);
+
+    /**
+     *
+     * @return Returns a String that represents the SQL needed to retrieve on entity
+     * The SQL must contain one SQL parameter, i.e. "?" that will bind to the entity's ID.
+     */
+    abstract String getfindByIdSql();
 
     abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
 
