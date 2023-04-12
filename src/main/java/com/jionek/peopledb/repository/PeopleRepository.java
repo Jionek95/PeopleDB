@@ -72,7 +72,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
 //        }
 //        return Optional.ofNullable(person);
 //    }
-
      **/
 
     public Optional<Person> findById(Long id) {
@@ -138,11 +137,13 @@ public class PeopleRepository extends CRUDRepository<Person> {
         }
     }
 
+    /** SLOWER VERSION OF delete(Person...people)
 //    public void delete(Person...people) {
 //        for(Person person : people){
 //            delete(person);
 //        }
 //    }
+     **/
 
     public void delete(Person... people) {
         try {
