@@ -2,11 +2,8 @@ package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Entity;
-import com.jionek.peopledb.model.Person;
 
 import java.sql.*;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Optional;
 
 abstract class CRUDRepository <T extends Entity> {
@@ -51,7 +48,7 @@ abstract class CRUDRepository <T extends Entity> {
         return Optional.ofNullable(entity);
     }
 
-    abstract T extractEntityFromResultSet(ResultSet rs);
+    abstract T extractEntityFromResultSet(ResultSet rs) throws SQLException;
 
     /**
      *
