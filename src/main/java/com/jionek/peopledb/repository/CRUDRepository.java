@@ -2,7 +2,6 @@ package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Entity;
-import com.jionek.peopledb.model.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -65,6 +64,23 @@ abstract class CRUDRepository <T extends Entity> {
         }
         return entities;
     }
+
+    public long count() {
+        long count = 0;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(getCountSql());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
+
+    protected abstract String getCountSql();
 
     protected abstract String getFindAllSql();
 
