@@ -47,7 +47,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
 
     @Override
     String getfindByIdSql() {
-        return null;
+        return FIND_ALL_SQL;
     }
 
 
@@ -74,21 +74,21 @@ public class PeopleRepository extends CRUDRepository<Person> {
 //    }
      **/
 
-    public Optional<Person> findById(Long id) {
-        Person person = null;
-
-        try {
-            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
-            ps.setLong(1, id);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                person = extractEntityFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return Optional.ofNullable(person);
-    }
+//    public Optional<Person> findById(Long id) {
+//        Person person = null;
+//
+//        try {
+//            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
+//            ps.setLong(1, id);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                person = extractEntityFromResultSet(rs);
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return Optional.ofNullable(person);
+//    }
 
 
     public List<Person> findAll() {
@@ -98,11 +98,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
             PreparedStatement ps = connection.prepareStatement(FIND_ALL_SQL);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-//                long personId = rs.getLong("ID");
-                String firstName = rs.getString("FIRST_NAME");
-                String lastName = rs.getString("LAST_NAME");
-                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
-                people.add(new Person(firstName, lastName, dob));
+                people.add(extractEntityFromResultSet(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
