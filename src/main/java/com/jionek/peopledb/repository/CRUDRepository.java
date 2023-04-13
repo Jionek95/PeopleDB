@@ -144,9 +144,6 @@ abstract class CRUDRepository <T extends Entity> {
                 .findFirst().orElseGet(sqlGetter);
     }
 
-    protected String getSaveSql(){return "";}
-    protected String getUpdateSql(){return "";}
-
     /**
      *
      * @return Should return SQL String like:
@@ -156,6 +153,8 @@ abstract class CRUDRepository <T extends Entity> {
     protected String getDeleteSql(){throw new RuntimeException("SQL not defined.");}
     protected String getCountSql(){throw new RuntimeException("SQL not defined.");}
     protected String getFindAllSql(){throw new RuntimeException("SQL not defined.");}
+    protected String getSaveSql(){throw new RuntimeException("SQL not defined.");}
+    protected String getUpdateSql(){throw new RuntimeException("SQL not defined.");}
     /**
      *
      * @return Returns a String that represents the SQL needed to retrieve on entity

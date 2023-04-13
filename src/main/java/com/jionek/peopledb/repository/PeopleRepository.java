@@ -56,27 +56,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
     }
 
 
-//    @Override
-//    protected String getfindByIdSql() {
-//        return FIND_BY_ID_SQL;
-//    }
-//    @Override
-//    protected String getFindAllSql() {
-//        return FIND_ALL_SQL;
-//    }
-//    @Override
-//    protected String getCountSql() {
-//        return SELECT_COUNT_SQL;
-//    }
-//    @Override
-//    protected String getDeleteSql() {
-//        return DELETE_SQL;
-//    }
-//    @Override
-//    protected String getDeleteInSql() {
-//        return DELETE_IN_SQL;
-//    }
-
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
         return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
     }
