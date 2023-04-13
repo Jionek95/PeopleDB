@@ -61,7 +61,7 @@ abstract class CRUDRepository <T extends Entity> {
         List<T> entities = new ArrayList<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement(getFindAllSql());
+            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation(CrudOperation.FIND_ALL, this::getFindAllSql));
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 entities.add(extractEntityFromResultSet(rs));
@@ -76,7 +76,7 @@ abstract class CRUDRepository <T extends Entity> {
         long count = 0;
 
         try {
-            PreparedStatement ps = connection.prepareStatement(getCountSql());
+            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation(CrudOperation.COUNT, this::getCountSql));
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 count = rs.getLong(1);
@@ -89,7 +89,7 @@ abstract class CRUDRepository <T extends Entity> {
 
     public void delete(T entity) {
         try {
-            PreparedStatement ps = connection.prepareStatement(getDeleteSQL());
+            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation(CrudOperation.DELETE_ONE, this::getDeleteSql));
             ps.setLong(1, entity.getId());
             int recordsAffected = ps.executeUpdate();
             System.out.println(recordsAffected);
@@ -107,7 +107,7 @@ abstract class CRUDRepository <T extends Entity> {
                     .map(id -> String.valueOf(id))
                     .collect(joining(","));
 
-            int affectedRecordCount = cs.executeUpdate(getDeleteInSql().replace(":ids", ids));// :ids is a named parameter
+            int affectedRecordCount = cs.executeUpdate(getSqlByAnnotation(CrudOperation.DELETE_MANY, this::getDeleteInSql).replace(":ids", ids));// :ids is a named parameter
             System.out.println(affectedRecordCount);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -143,18 +143,18 @@ abstract class CRUDRepository <T extends Entity> {
      * @return Should return SQL String like:
      * "DELETE FROM PEOPLE WHERE ID IN(:ids)"
      */
-    protected abstract String getDeleteInSql();
-    protected abstract String getDeleteSQL();
-    protected abstract String getCountSql();
-    protected abstract String getFindAllSql();
-    abstract T extractEntityFromResultSet(ResultSet rs) throws SQLException;
-
+    protected String getDeleteInSql(){return "";}
+    protected String getDeleteSql(){return "";}
+    protected String getCountSql(){return "";}
+    protected String getFindAllSql(){return  "";}
     /**
      *
      * @return Returns a String that represents the SQL needed to retrieve on entity
      * The SQL must contain one SQL parameter, i.e. "?" that will bind to the entity's ID.
      */
-    abstract String getfindByIdSql();
+    protected String getfindByIdSql(){return "";}
+
+    abstract T extractEntityFromResultSet(ResultSet rs) throws SQLException;
     abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
     abstract void mapForUpdate(T entity, PreparedStatement ps) throws SQLException;
 
