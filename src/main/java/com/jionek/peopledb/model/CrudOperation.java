@@ -5,6 +5,8 @@ public enum CrudOperation {
     UPDATE,
     FIND_BY_ID,
     FIND_ALL,
-    DELETE
+    COUNT,
+    DELETE_ONE,
+    DELETE_MANY
 
 }
