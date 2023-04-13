@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.joining;
 
@@ -20,17 +21,9 @@ abstract class CRUDRepository <T extends Entity> {
     }
 
 
-    private String getSaveSqlByAnnotation(){
-        return Arrays.stream(this.getClass().getDeclaredMethods())
-                .filter(method -> "mapForSave".contentEquals(method.getName()))
-                .map(method -> method.getAnnotation(SQL.class))
-                .map(SQL::value)
-                .findFirst().orElse(getSaveSql());
-    }
-
     public T save(T entity) throws UnableToSaveException {
         try {
-            PreparedStatement ps = connection.prepareStatement(getSaveSqlByAnnotation(), Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation("mapForSave", this::getSaveSql), Statement.RETURN_GENERATED_KEYS);
             mapForSave(entity, ps);
             int recordsAffected = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -119,10 +112,10 @@ abstract class CRUDRepository <T extends Entity> {
             throw new RuntimeException(e);
         }
     }
-
+    
     public void update(T entity) {
         try {
-            PreparedStatement ps = connection.prepareStatement(getUpdateSQL());
+            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation("mapForUpdate", this::getUpdateSql));
             mapForUpdate(entity, ps);
             ps.setLong(5, entity.getId());
             ps.executeUpdate();
@@ -131,7 +124,16 @@ abstract class CRUDRepository <T extends Entity> {
         }
     }
 
-    protected abstract String getUpdateSQL();
+    private String getSqlByAnnotation(String methodName, Supplier<String> sqlGetter){
+        return Arrays.stream(this.getClass().getDeclaredMethods())
+                .filter(method -> methodName.contentEquals(method.getName()))
+                .map(method -> method.getAnnotation(SQL.class))
+                .map(SQL::value)
+                .findFirst().orElseGet(sqlGetter);
+    }
+
+    protected String getSaveSql(){return "";}
+    protected String getUpdateSql(){return "";}
 
     /**
      *
@@ -152,6 +154,5 @@ abstract class CRUDRepository <T extends Entity> {
     abstract String getfindByIdSql();
     abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
     abstract void mapForUpdate(T entity, PreparedStatement ps) throws SQLException;
-    String getSaveSql(){return "";}
 
-    }
+}
