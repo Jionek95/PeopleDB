@@ -12,7 +12,10 @@ import java.time.ZonedDateTime;
 
 public class PeopleRepository extends CRUDRepository<Person> {
 
-    public static final String SAVE_PERSON_SQL = "INSERT INTO PEOPLE (FIRST_NAME, LAST_NAME, DOB) VALUES(?, ?, ?)";
+    public static final String SAVE_PERSON_SQL = """
+            INSERT INTO PEOPLE
+            (FIRST_NAME, LAST_NAME, DOB, SALARY, EMAIL)
+            VALUES(?, ?, ?, ?, ?)""";
     public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB, SALARY FROM PEOPLE WHERE ID=?";
     public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
     public static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM PEOPLE";
@@ -27,10 +30,13 @@ public class PeopleRepository extends CRUDRepository<Person> {
 
     @Override
     @SQL(value = SAVE_PERSON_SQL, operationType = CrudOperation.SAVE)
-    void mapForSave(Person person, PreparedStatement ps) throws SQLException {
-        ps.setString(1, person.getFirstName());
-        ps.setString(2, person.getLastName());
-        ps.setTimestamp(3, convertDobToTimestamp(person.getDob()));
+    void mapForSave(Person entity, PreparedStatement ps) throws SQLException {
+        ps.setString(1, entity.getFirstName());
+        ps.setString(2, entity.getLastName());
+        ps.setTimestamp(3, convertDobToTimestamp(entity.getDob()));
+        ps.setBigDecimal(4, entity.getSalary());
+        ps.setString(5, entity.getEmail());
+
     }
     @Override
     @SQL(value = UPDATE_SQL, operationType = CrudOperation.UPDATE)
