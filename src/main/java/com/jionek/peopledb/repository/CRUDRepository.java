@@ -5,7 +5,6 @@ import com.jionek.peopledb.annotation.MultiSql;
 import com.jionek.peopledb.annotation.SQL;
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.CrudOperation;
-import com.jionek.peopledb.model.Entity;
 
 import java.sql.*;
 import java.util.*;
