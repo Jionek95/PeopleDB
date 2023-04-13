@@ -1,5 +1,6 @@
 package com.jionek.peopledb.repository;
 
+import com.jionek.peopledb.annotation.MultiSql;
 import com.jionek.peopledb.annotation.SQL;
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.CrudOperation;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
 
@@ -126,10 +128,17 @@ abstract class CRUDRepository <T extends Entity> {
     }
 
     private String getSqlByAnnotation(CrudOperation operationType, Supplier<String> sqlGetter){
-        return Arrays.stream(this.getClass().getDeclaredMethods())
+        Stream<SQL> multiSqlStream = Arrays.stream(this.getClass().getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(MultiSql.class))
+                .map(method -> method.getAnnotation(MultiSql.class))
+                .flatMap(multiSql -> Arrays.stream(multiSql.value()));
+
+        Stream<SQL> sqlStream = Arrays.stream(this.getClass().getDeclaredMethods())
 //                .filter(method -> methodName.contentEquals(method.getName()))
                 .filter(method -> method.isAnnotationPresent(SQL.class))
-                .map(method -> method.getAnnotation(SQL.class))
+                .map(method -> method.getAnnotation(SQL.class));
+
+        return Stream.concat(multiSqlStream, sqlStream)
                 .filter(annotation -> annotation.operationType().equals(operationType))
                 .map(SQL::value)
                 .findFirst().orElseGet(sqlGetter);
