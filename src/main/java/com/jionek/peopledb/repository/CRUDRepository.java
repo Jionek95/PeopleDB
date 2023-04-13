@@ -2,6 +2,7 @@ package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.annotation.SQL;
 import com.jionek.peopledb.exception.UnableToSaveException;
+import com.jionek.peopledb.model.CrudOperation;
 import com.jionek.peopledb.model.Entity;
 
 import java.sql.*;
@@ -23,7 +24,7 @@ abstract class CRUDRepository <T extends Entity> {
 
     public T save(T entity) throws UnableToSaveException {
         try {
-            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation("mapForSave", this::getSaveSql), Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation(CrudOperation.SAVE, this::getSaveSql), Statement.RETURN_GENERATED_KEYS);
             mapForSave(entity, ps);
             int recordsAffected = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -44,7 +45,7 @@ abstract class CRUDRepository <T extends Entity> {
         T entity = null;
 
         try {
-            PreparedStatement ps = connection.prepareStatement(getfindByIdSql());
+            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation(CrudOperation.FIND_BY_ID, this::getfindByIdSql));
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
@@ -115,7 +116,7 @@ abstract class CRUDRepository <T extends Entity> {
     
     public void update(T entity) {
         try {
-            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation("mapForUpdate", this::getUpdateSql));
+            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation(CrudOperation.UPDATE, this::getUpdateSql));
             mapForUpdate(entity, ps);
             ps.setLong(5, entity.getId());
             ps.executeUpdate();
@@ -124,10 +125,12 @@ abstract class CRUDRepository <T extends Entity> {
         }
     }
 
-    private String getSqlByAnnotation(String methodName, Supplier<String> sqlGetter){
+    private String getSqlByAnnotation(CrudOperation operationType, Supplier<String> sqlGetter){
         return Arrays.stream(this.getClass().getDeclaredMethods())
-                .filter(method -> methodName.contentEquals(method.getName()))
+//                .filter(method -> methodName.contentEquals(method.getName()))
+                .filter(method -> method.isAnnotationPresent(SQL.class))
                 .map(method -> method.getAnnotation(SQL.class))
+                .filter(annotation -> annotation.operationType().equals(operationType))
                 .map(SQL::value)
                 .findFirst().orElseGet(sqlGetter);
     }
