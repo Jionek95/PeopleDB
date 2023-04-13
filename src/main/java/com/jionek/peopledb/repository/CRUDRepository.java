@@ -90,7 +90,7 @@ abstract class CRUDRepository <T extends Entity> {
     public void delete(T entity) {
         try {
             PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation(CrudOperation.DELETE_ONE, this::getDeleteSql));
-            ps.setLong(1, entity.getId());
+            ps.setLong(1, getIdByAnnotation(entity));
             int recordsAffected = ps.executeUpdate();
             System.out.println(recordsAffected);
         } catch (SQLException e) {
@@ -103,7 +103,7 @@ abstract class CRUDRepository <T extends Entity> {
             Statement cs = connection.createStatement();
 
             String ids = Arrays.stream(entities)
-                    .map(entity -> entity.getId())
+                    .map(entity -> getIdByAnnotation(entity))
                     .map(id -> String.valueOf(id))
                     .collect(joining(","));
 
@@ -118,7 +118,7 @@ abstract class CRUDRepository <T extends Entity> {
         try {
             PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation(CrudOperation.UPDATE, this::getUpdateSql));
             mapForUpdate(entity, ps);
-            ps.setLong(5, entity.getId());
+            ps.setLong(5, getIdByAnnotation(entity));
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -142,7 +142,20 @@ abstract class CRUDRepository <T extends Entity> {
                 .findFirst().orElseGet(sqlGetter);
     }
 
-    private Long findIdByAnnotation(T entity){
+    private void setIdByAnnotation(Long id, T entity){
+        Arrays.stream(entity.getClass().getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(Id.class))
+                .forEach(field -> {
+                    field.setAccessible(true);
+                    try {
+                        field.set(entity, id);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException("Unable to set ID field value");
+                    }
+                });
+    }
+
+    private Long getIdByAnnotation(T entity){
         return Arrays.stream(entity.getClass().getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(Id.class))
 //                .map(field -> field.getAnnotation(Id.class))
@@ -150,7 +163,7 @@ abstract class CRUDRepository <T extends Entity> {
                     field.setAccessible(true);
                     Long id = null;
                     try {
-                        id = field.getLong(entity);
+                        id = (long) field.get(entity);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
