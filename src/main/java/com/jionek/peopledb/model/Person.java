@@ -74,7 +74,7 @@ public class Person{
         return salary;
     }
 
-    public void setSalary() {
+    public void setSalary(BigDecimal salary) {
         this.salary = salary;
     }
 
