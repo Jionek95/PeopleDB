@@ -152,10 +152,10 @@ abstract class CRUDRepository <T extends Entity> {
      * @return Should return SQL String like:
      * "DELETE FROM PEOPLE WHERE ID IN(:ids)"
      */
-    protected String getDeleteInSql(){return "";}
-    protected String getDeleteSql(){return "";}
-    protected String getCountSql(){return "";}
-    protected String getFindAllSql(){return  "";}
+    protected String getDeleteInSql(){throw new RuntimeException("SQL not defined.");}
+    protected String getDeleteSql(){throw new RuntimeException("SQL not defined.");}
+    protected String getCountSql(){throw new RuntimeException("SQL not defined.");}
+    protected String getFindAllSql(){throw new RuntimeException("SQL not defined.");}
     /**
      *
      * @return Returns a String that represents the SQL needed to retrieve on entity
