@@ -5,13 +5,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -148,4 +150,22 @@ public class PeopleRepositoryTest {
         assertThat(p1.getSalary()).isNotEqualTo(p2.getSalary());
     }
 
+    @Test
+    public void loadData() throws IOException {
+        Files.lines(Path.of("E:\\programowanie\\java udemy\\Employees\\Hr5m.csv"))
+                .skip(1)
+                .limit(5)
+                .map(s -> s.split(","))
+                .map(arr -> {
+                    LocalDate dob = LocalDate.parse(arr[10], DateTimeFormatter.ofPattern("M/d/yyyy"));
+                    LocalTime tob = LocalTime.parse(arr[11], DateTimeFormatter.ofPattern("hh:mm:ss a"));
+                    LocalDateTime dtob = LocalDateTime.of(dob, tob);
+                    ZonedDateTime zdtob = ZonedDateTime.of(dtob, ZoneId.of("+0"));
+                    Person person = new Person(arr[2], arr[4], zdtob);
+                    person.setSalary(new BigDecimal(arr[25]));
+                    person.setEmail(arr[6]);
+                    return person;
+                })
+                .forEach(repo::save);
+    }
 }
