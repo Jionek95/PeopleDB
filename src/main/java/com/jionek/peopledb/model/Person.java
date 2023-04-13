@@ -14,8 +14,8 @@ public class Person{
     private String firstName;
     private String lastName;
     private ZonedDateTime dob;
-
     private BigDecimal salary = new BigDecimal("0");
+    private String email;
 
     public Person (String firstName, String lastName, ZonedDateTime dob) {
         this.firstName = firstName;
@@ -31,6 +31,11 @@ public class Person{
     public Person(Long id, String firstName, String lastName, ZonedDateTime dob, BigDecimal salary) {
         this(id, firstName, lastName, dob);
         this.salary = salary;
+    }
+
+    public Person(Long id, String firstName, String lastName, ZonedDateTime dob, BigDecimal salary, String email) {
+        this(id, firstName, lastName, dob, salary);
+        this.email = email;
     }
 
     public Long getId() {
@@ -69,8 +74,16 @@ public class Person{
         return salary;
     }
 
-    public void setSalary(BigDecimal salary) {
+    public void setSalary() {
         this.salary = salary;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
