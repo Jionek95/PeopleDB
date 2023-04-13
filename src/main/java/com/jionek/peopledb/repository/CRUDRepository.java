@@ -1,5 +1,6 @@
 package com.jionek.peopledb.repository;
 
+import com.jionek.peopledb.annotation.SQL;
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.Entity;
 
@@ -18,9 +19,18 @@ abstract class CRUDRepository <T extends Entity> {
         this.connection = connection;
     }
 
+
+    private String getSaveSqlByAnnotation(){
+        return Arrays.stream(this.getClass().getDeclaredMethods())
+                .filter(method -> "mapForSave".contentEquals(method.getName()))
+                .map(method -> method.getAnnotation(SQL.class))
+                .map(SQL::value)
+                .findFirst().orElse(getSaveSql());
+    }
+
     public T save(T entity) throws UnableToSaveException {
         try {
-            PreparedStatement ps = connection.prepareStatement(getSaveSql(), Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(getSaveSqlByAnnotation(), Statement.RETURN_GENERATED_KEYS);
             mapForSave(entity, ps);
             int recordsAffected = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -142,6 +152,6 @@ abstract class CRUDRepository <T extends Entity> {
     abstract String getfindByIdSql();
     abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
     abstract void mapForUpdate(T entity, PreparedStatement ps) throws SQLException;
-    abstract String getSaveSql();
+    String getSaveSql(){return "";}
 
     }
