@@ -40,6 +40,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
         return new Person(personId, firstName, lastName, dob, salary);
     }
     @Override
+    @SQL(UPDATE_SQL)
     void mapForUpdate(Person entity, PreparedStatement ps) throws SQLException {
         ps.setString(1, entity.getFirstName());
         ps.setString(2, entity.getLastName());
@@ -67,10 +68,6 @@ public class PeopleRepository extends CRUDRepository<Person> {
     @Override
     protected String getDeleteInSql() {
         return DELETE_IN_SQL;
-    }
-    @Override
-    protected String getUpdateSQL() {
-        return UPDATE_SQL;
     }
 
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
