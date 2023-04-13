@@ -1,5 +1,6 @@
 package com.jionek.peopledb.repository;
 
+import com.jionek.peopledb.annotation.Id;
 import com.jionek.peopledb.annotation.MultiSql;
 import com.jionek.peopledb.annotation.SQL;
 import com.jionek.peopledb.exception.UnableToSaveException;
@@ -7,10 +8,7 @@ import com.jionek.peopledb.model.CrudOperation;
 import com.jionek.peopledb.model.Entity;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -144,6 +142,23 @@ abstract class CRUDRepository <T extends Entity> {
                 .findFirst().orElseGet(sqlGetter);
     }
 
+    private Long findIdByAnnotation(T entity){
+        return Arrays.stream(entity.getClass().getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(Id.class))
+//                .map(field -> field.getAnnotation(Id.class))
+                .map(field -> {
+                    field.setAccessible(true);
+                    Long id = null;
+                    try {
+                        id = field.getLong(entity);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return id;
+                })
+                .findFirst().orElseThrow(() -> new RuntimeException("No ID annotated field founded."));
+    }
+
     /**
      *
      * @return Should return SQL String like:
@@ -160,7 +175,7 @@ abstract class CRUDRepository <T extends Entity> {
      * @return Returns a String that represents the SQL needed to retrieve on entity
      * The SQL must contain one SQL parameter, i.e. "?" that will bind to the entity's ID.
      */
-    protected String getfindByIdSql(){return "";}
+    protected String getfindByIdSql(){throw new RuntimeException("SQL not defined.");}
 
     abstract T extractEntityFromResultSet(ResultSet rs) throws SQLException;
     abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
