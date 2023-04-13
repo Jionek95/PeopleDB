@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
 
-abstract class CRUDRepository <T extends Entity> {
+abstract class CRUDRepository <T> {
     protected Connection connection;
 
     public CRUDRepository(Connection connection) {
@@ -30,7 +30,7 @@ abstract class CRUDRepository <T extends Entity> {
             ResultSet rs = ps.getGeneratedKeys();
             while (rs.next()){
                 long id = rs.getLong(1);
-                entity.setId(id);
+                setIdByAnnotation(id, entity);
                 System.out.println(entity);
             }
             System.out.printf("Records affected: %d%n", recordsAffected);

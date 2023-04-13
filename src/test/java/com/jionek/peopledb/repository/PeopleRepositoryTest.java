@@ -13,13 +13,9 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-//import java.util.Arrays;
-//import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-//import java.util.stream.Collectors;
 
-//import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PeopleRepositoryTest {
