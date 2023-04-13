@@ -1,5 +1,6 @@
 package com.jionek.peopledb.repository;
 
+import com.jionek.peopledb.annotation.SQL;
 import com.jionek.peopledb.model.Person;
 
 import java.math.BigDecimal;
@@ -23,6 +24,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
 
 
     @Override
+    @SQL(SAVE_PERSON_SQL)
     void mapForSave(Person person, PreparedStatement ps) throws SQLException {
         ps.setString(1, person.getFirstName());
         ps.setString(2, person.getLastName());
@@ -45,10 +47,7 @@ public class PeopleRepository extends CRUDRepository<Person> {
         ps.setBigDecimal(4, entity.getSalary());
     }
 
-    @Override
-    String getSaveSql() {
-        return SAVE_PERSON_SQL;
-    }
+
     @Override
     String getfindByIdSql() {
         return FIND_BY_ID_SQL;
