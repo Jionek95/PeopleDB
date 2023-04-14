@@ -14,7 +14,7 @@ public class Person{
     private String firstName;
     private String lastName;
     private ZonedDateTime dob;
-    private BigDecimal salary = new BigDecimal("0");
+    private BigDecimal salary;
     private String email;
 
     public Person (String firstName, String lastName, ZonedDateTime dob) {
