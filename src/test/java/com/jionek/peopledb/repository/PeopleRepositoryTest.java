@@ -154,12 +154,11 @@ public class PeopleRepositoryTest {
     }
 
     @Test
-    public void loadData() throws IOException {
+    public void loadData() throws IOException, SQLException {
 
         Files.lines(Path.of("E:/programowanie/java udemy/Employees/Hr5m.csv"))
                 .skip(1)
-                .skip(3)
-                .limit(5)
+                .limit(10000)
                 .map(s -> s.split(","))
                 .map(arr -> {
                     LocalDate dob = LocalDate.parse(arr[10], DateTimeFormatter.ofPattern("M/d/yyyy"));
@@ -172,6 +171,7 @@ public class PeopleRepositoryTest {
                     return person;
                 })
                 .forEach(repo::save);
+        connection.commit();
     }
 
     @Test
