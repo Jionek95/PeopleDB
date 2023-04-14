@@ -36,8 +36,8 @@ public class PeopleRepository extends CRUDRepository<Person> {
         ps.setTimestamp(3, convertDobToTimestamp(entity.getDob()));
         ps.setBigDecimal(4, entity.getSalary());
         ps.setString(5, entity.getEmail());
-
     }
+
     @Override
     @SQL(value = UPDATE_SQL, operationType = CrudOperation.UPDATE)
     void mapForUpdate(Person entity, PreparedStatement ps) throws SQLException {
