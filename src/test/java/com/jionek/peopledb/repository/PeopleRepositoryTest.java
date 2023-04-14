@@ -158,7 +158,7 @@ public class PeopleRepositoryTest {
 
         Files.lines(Path.of("E:/programowanie/java udemy/Employees/Hr5m.csv"))
                 .skip(1)
-                .limit(10000)
+                .limit(100000)
                 .map(s -> s.split(","))
                 .map(arr -> {
                     LocalDate dob = LocalDate.parse(arr[10], DateTimeFormatter.ofPattern("M/d/yyyy"));
