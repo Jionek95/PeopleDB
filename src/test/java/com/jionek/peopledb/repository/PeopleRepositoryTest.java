@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -24,6 +25,8 @@ public class PeopleRepositoryTest {
 
     private Connection connection;
     private PeopleRepository repo;
+    //    private CRUDRepository<Person> repo;
+
 
     @BeforeEach
     void setUp() throws SQLException {
@@ -45,7 +48,7 @@ public class PeopleRepositoryTest {
     @Test
     public void canSaveOnePerson(){
         Person john = new Person(
-                "John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,10,0, ZoneId.of("-6"))
+                "John", "Smith", ZonedDateTime.of(1960, 11, 15 , 15,15,10,0, ZoneId.of("+0"))
         );
         Person savedPerson = repo.save(john);
         assertThat(savedPerson.getId()).isGreaterThan(0);
@@ -152,9 +155,10 @@ public class PeopleRepositoryTest {
 
     @Test
     public void loadData() throws IOException {
-        
+
         Files.lines(Path.of("E:/programowanie/java udemy/Employees/Hr5m.csv"))
                 .skip(1)
+                .skip(3)
                 .limit(5)
                 .map(s -> s.split(","))
                 .map(arr -> {
@@ -168,5 +172,14 @@ public class PeopleRepositoryTest {
                     return person;
                 })
                 .forEach(repo::save);
+    }
+
+    @Test
+    public void experiment(){
+        LocalDateTime ldt = LocalDateTime.of(1960, 12, 3, 4, 34, 54);
+        ZonedDateTime zdt = ZonedDateTime.of(ldt, ZoneId.of("+0"));
+        Timestamp tsmt = Timestamp.valueOf(zdt.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
+        System.out.println(tsmt);
+        System.out.println(zdt);
     }
 }
