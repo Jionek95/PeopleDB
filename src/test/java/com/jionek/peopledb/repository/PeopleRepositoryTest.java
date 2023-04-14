@@ -45,7 +45,7 @@ public class PeopleRepositoryTest {
     @Test
     public void canSaveOnePerson(){
         Person john = new Person(
-                "John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))
+                "John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,10,0, ZoneId.of("-6"))
         );
         Person savedPerson = repo.save(john);
         assertThat(savedPerson.getId()).isGreaterThan(0);
@@ -152,7 +152,8 @@ public class PeopleRepositoryTest {
 
     @Test
     public void loadData() throws IOException {
-        Files.lines(Path.of("E:\\programowanie\\java udemy\\Employees\\Hr5m.csv"))
+        
+        Files.lines(Path.of("E:/programowanie/java udemy/Employees/Hr5m.csv"))
                 .skip(1)
                 .limit(5)
                 .map(s -> s.split(","))
