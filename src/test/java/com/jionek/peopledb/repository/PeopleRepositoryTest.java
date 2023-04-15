@@ -3,6 +3,7 @@ package com.jionek.peopledb.repository;
 import com.jionek.peopledb.model.Person;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -154,6 +155,7 @@ public class PeopleRepositoryTest {
     }
 
     @Test
+    @Disabled
     public void loadData() throws IOException, SQLException {
 
         Files.lines(Path.of("E:/programowanie/java udemy/Employees/Hr5m.csv"))
