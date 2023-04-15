@@ -13,10 +13,10 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
 
-abstract class CRUDRepository <T> {
+abstract class CrudRepository<T> {
     protected Connection connection;
 
-    public CRUDRepository(Connection connection) {
+    public CrudRepository(Connection connection) {
         this.connection = connection;
     }
 
