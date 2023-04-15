@@ -8,11 +8,11 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 
 
-public class PeopleRepository extends CRUDRepository<Person> {
+public class PeopleRepository extends CrudRepository<Person> {
 
+    private AddressRepository addressRepository = null;
     public static final String SAVE_PERSON_SQL = """
             INSERT INTO PEOPLE
             (FIRST_NAME, LAST_NAME, DOB, SALARY, EMAIL)
@@ -26,12 +26,14 @@ public class PeopleRepository extends CRUDRepository<Person> {
 
     public PeopleRepository(Connection connection) {
         super(connection);
+        addressRepository = new AddressRepository(connection);
     }
 
 
     @Override
     @SQL(value = SAVE_PERSON_SQL, operationType = CrudOperation.SAVE)
     void mapForSave(Person entity, PreparedStatement ps) throws SQLException {
+        addressRepository.save(entity.getHomeAddress());
         ps.setString(1, entity.getFirstName());
         ps.setString(2, entity.getLastName());
         ps.setTimestamp(3, convertDobToTimestamp(entity.getDob()));
