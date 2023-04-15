@@ -16,6 +16,8 @@ public class Person{
     private ZonedDateTime dob;
     private BigDecimal salary;
     private String email;
+    private Address homeAddress;
+
 
     public Person (String firstName, String lastName, ZonedDateTime dob) {
         this.firstName = firstName;
@@ -37,6 +39,7 @@ public class Person{
         this(id, firstName, lastName, dob, salary);
         this.email = email;
     }
+
 
     public Long getId() {
         return id;
@@ -84,6 +87,14 @@ public class Person{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public Address getHomeAddress() {
+        return homeAddress;
     }
 
     @Override
