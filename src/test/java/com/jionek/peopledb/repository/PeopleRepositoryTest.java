@@ -1,6 +1,8 @@
 package com.jionek.peopledb.repository;
 
+import com.jionek.peopledb.model.Address;
 import com.jionek.peopledb.model.Person;
+import com.jionek.peopledb.model.Region;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -26,7 +28,6 @@ public class PeopleRepositoryTest {
 
     private Connection connection;
     private PeopleRepository repo;
-    //    private CRUDRepository<Person> repo;
 
 
     @BeforeEach
@@ -46,6 +47,7 @@ public class PeopleRepositoryTest {
             connection.close();
         }
     }
+
     @Test
     public void canSaveOnePerson(){
         Person john = new Person(
@@ -66,6 +68,16 @@ public class PeopleRepositoryTest {
        Person savedPerson2 = repo.save(bobby);
        assertThat(savedPerson1.getId()).isNotEqualTo(savedPerson2.getId());
    }
+   @Test
+   public void canSavePersonWithAddress() {
+        Person john = new Person("John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+        Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "United States", "Fulton County", Region.WEST);
+        john.setHomeAddress(address);
+
+       Person savedPerson = repo.save(john);
+       assertThat(savedPerson.getHomeAddress().id()).isGreaterThan(0);
+   }
+
    @Test
     public void canFindPersonById(){
        Person savedPerson = repo.save(new Person(2L,"test", "jackson", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)));
