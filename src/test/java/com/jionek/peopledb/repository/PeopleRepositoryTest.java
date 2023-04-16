@@ -71,7 +71,7 @@ public class PeopleRepositoryTest {
    @Test
    public void canSavePersonWithAddress() {
         Person john = new Person("John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
-        Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "United States", "Fulton County", Region.WEST);
+        Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "Fulton County", Region.WEST, "United States");
         john.setHomeAddress(address);
 
        Person savedPerson = repo.save(john);
