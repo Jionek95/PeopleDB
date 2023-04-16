@@ -24,7 +24,7 @@ public class AddressRepository extends CrudRepository<Address> {
     @Override
     @SQL(operationType = CrudOperation.SAVE, value = """
             INSERT INTO ADDRESSES (STREET_ADDRESS, ADDRESS2, CITY, STATE, POSTCODE, COUNTY, REGION, COUNTRY)
-            VALUES =(?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?)
             """)
     void mapForSave(Address entity, PreparedStatement ps) throws SQLException {
         ps.setString(1, entity.streetAddress());
@@ -33,10 +33,8 @@ public class AddressRepository extends CrudRepository<Address> {
         ps.setString(4, entity.state());
         ps.setString(5, entity.postcode());
         ps.setString(6, entity.county());
-        ps.setString(7, entity.region().toString());
+        ps.setString(7, entity.region().name());
         ps.setString(8, entity.country());
-
-
     }
 
     @Override
