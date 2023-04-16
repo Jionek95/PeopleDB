@@ -17,8 +17,16 @@ public final class Address {
     private final String country;
 
     public Address(
-            @Id Long id, String streetAddress, String address2, String city, String state, String postcode, String county, Region region,
+            @Id Long id,
+            String streetAddress,
+            String address2,
+            String city,
+            String state,
+            String postcode,
+            String county,
+            Region region,
             String country) {
+
         this.id = id;
         this.streetAddress = streetAddress;
         this.address2 = address2;
