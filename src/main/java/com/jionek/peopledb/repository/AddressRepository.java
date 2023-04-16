@@ -28,7 +28,7 @@ public class AddressRepository extends CrudRepository<Address> {
             """)
     void mapForSave(Address entity, PreparedStatement ps) throws SQLException {
         ps.setString(1, entity.streetAddress());
-        ps.setString(1, entity.address2());
+        ps.setString(2, entity.address2());
         ps.setString(3, entity.city());
         ps.setString(4, entity.state());
         ps.setString(5, entity.postcode());
