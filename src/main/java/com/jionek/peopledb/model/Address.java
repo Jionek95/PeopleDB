@@ -12,22 +12,22 @@ public final class Address {
     private final String city;
     private final String state;
     private final String postcode;
-    private final String country;
     private final String county;
     private final Region region;
+    private final String country;
 
     public Address(
-            @Id Long id, String streetAddress, String address2, String city, String state, String postcode,
-            String country, String county, Region region) {
+            @Id Long id, String streetAddress, String address2, String city, String state, String postcode, String county, Region region,
+            String country) {
         this.id = id;
         this.streetAddress = streetAddress;
         this.address2 = address2;
         this.city = city;
         this.state = state;
         this.postcode = postcode;
-        this.country = country;
         this.county = county;
         this.region = region;
+        this.country = country;
     }
 
     @Id
