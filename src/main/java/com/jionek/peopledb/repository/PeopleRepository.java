@@ -1,6 +1,7 @@
 package com.jionek.peopledb.repository;
 
 import com.jionek.peopledb.annotation.SQL;
+import com.jionek.peopledb.model.Address;
 import com.jionek.peopledb.model.CrudOperation;
 import com.jionek.peopledb.model.Person;
 
@@ -12,11 +13,11 @@ import java.time.ZonedDateTime;
 
 public class PeopleRepository extends CrudRepository<Person> {
 
-    private AddressRepository addressRepository = null;
+    private AddressRepository addressRepository;
     public static final String SAVE_PERSON_SQL = """
             INSERT INTO PEOPLE
-            (FIRST_NAME, LAST_NAME, DOB, SALARY, EMAIL)
-            VALUES(?, ?, ?, ?, ?)""";
+            (FIRST_NAME, LAST_NAME, DOB, SALARY, EMAIL, HOME_ADDRESS)
+            VALUES(?, ?, ?, ?, ?, ?)""";
     public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB, SALARY FROM PEOPLE WHERE ID=?";
     public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
     public static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM PEOPLE";
@@ -33,12 +34,13 @@ public class PeopleRepository extends CrudRepository<Person> {
     @Override
     @SQL(value = SAVE_PERSON_SQL, operationType = CrudOperation.SAVE)
     void mapForSave(Person entity, PreparedStatement ps) throws SQLException {
-        addressRepository.save(entity.getHomeAddress());
+        Address savedAddress = addressRepository.save(entity.getHomeAddress());
         ps.setString(1, entity.getFirstName());
         ps.setString(2, entity.getLastName());
         ps.setTimestamp(3, convertDobToTimestamp(entity.getDob()));
         ps.setBigDecimal(4, entity.getSalary());
         ps.setString(5, entity.getEmail());
+        ps.setLong(6, savedAddress.id());
     }
 
     @Override
