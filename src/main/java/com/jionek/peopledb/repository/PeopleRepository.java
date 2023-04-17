@@ -89,8 +89,8 @@ public class PeopleRepository extends CrudRepository<Person> {
     }
 
     private Address extractAddress(ResultSet rs) throws SQLException {
-        if (rs.getObject("ID") == null) return null;
-        long addressId = rs.getLong("ID");
+        if (rs.getObject("A_ID") == null) return null;
+        long addressId = rs.getLong("A_ID");
         String streetAddress = rs.getString("STREET_ADDRESS");
         String address2 = rs.getString("ADDRESS2");
         String city = rs.getString("CITY");
