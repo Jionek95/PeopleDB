@@ -17,7 +17,7 @@ public class Person{
     private ZonedDateTime dob;
     private BigDecimal salary;
     private String email;
-    private Optional<Address> homeAddress;
+    private Optional<Address> homeAddress = Optional.empty();
 
 
     public Person (String firstName, String lastName, ZonedDateTime dob) {
