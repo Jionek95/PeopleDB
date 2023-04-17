@@ -23,6 +23,7 @@ public class AddressRepository extends CrudRepository<Address> {
             WHERE ID = ?
             """)
     Address extractEntityFromResultSet(ResultSet rs) throws SQLException {
+
         long id = rs.getLong("ID");
         String streetAddress = rs.getString("STREET_ADDRESS");
         String address2 = rs.getString("ADDRESS2");
