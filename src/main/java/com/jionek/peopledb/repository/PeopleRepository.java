@@ -91,6 +91,7 @@ public class PeopleRepository extends CrudRepository<Person> {
     private Address extractAddress(ResultSet rs) throws SQLException {
         if (rs.getObject("A_ID") == null) return null;
         long addressId = rs.getLong("A_ID");
+//        Long adrId = getValueByAlias("A_ID", rs, Long.class);
         String streetAddress = rs.getString("STREET_ADDRESS");
         String address2 = rs.getString("ADDRESS2");
         String city = rs.getString("CITY");
@@ -100,7 +101,19 @@ public class PeopleRepository extends CrudRepository<Person> {
         Region region = Region.valueOf(rs.getString("REGION").toUpperCase());
         String country = rs.getString("COUNTRY");
         Address address = new Address(addressId, streetAddress, address2, city, state, postcode, county, region, country);
+//        Address address = new Address(adrId, streetAddress, address2, city, state, postcode, county, region, country);
         return address;
+    }
+
+    // Can be used in general way for commented lines
+    private <T> T getValueByAlias(String alias, ResultSet rs, Class<T> clazz) throws SQLException {
+        int columnCount = rs.getMetaData().getColumnCount();
+        for(int colIdx=1; colIdx<=columnCount; colIdx++){
+            if (alias.equals(rs.getMetaData().getColumnLabel(colIdx))){
+               return (T) rs.getObject(colIdx);
+            }
+        }
+        throw  new SQLException(String.format("Colin not found for alias: '%s'", alias));
     }
 
 
