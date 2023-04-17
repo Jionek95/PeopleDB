@@ -23,7 +23,7 @@ public class PeopleRepository extends CrudRepository<Person> {
     public static final String FIND_BY_ID_SQL = """
             SELECT
             P.ID, P.FIRST_NAME, P.LAST_NAME, P.DOB, P.SALARY, P.HOME_ADDRESS,
-            A.ID, A.STREET_ADDRESS, A.ADDRESS2, A.CITY, A.STATE, A.POSTCODE, A.COUNTY, A.REGION, A.COUNTRY
+            A.ID AS A_ID, A.STREET_ADDRESS, A.ADDRESS2, A.CITY, A.STATE, A.POSTCODE, A.COUNTY, A.REGION, A.COUNTRY
             FROM PEOPLE AS P
             LEFT JOIN ADDRESSES AS A
             ON P.HOME_ADDRESS = A.ID
@@ -82,13 +82,14 @@ public class PeopleRepository extends CrudRepository<Person> {
         long homeAddressId = rs.getLong("HOME_ADDRESS");
 
         Address address = extractAddress(rs);
-
         Person person = new Person(personId, firstName, lastName, dob, salary);
+
         person.setHomeAddress(address);
         return person;
     }
 
     private Address extractAddress(ResultSet rs) throws SQLException {
+        if (rs.getObject("ID") == null) return null;
         long addressId = rs.getLong("ID");
         String streetAddress = rs.getString("STREET_ADDRESS");
         String address2 = rs.getString("ADDRESS2");
