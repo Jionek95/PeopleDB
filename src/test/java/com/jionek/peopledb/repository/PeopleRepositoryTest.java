@@ -84,12 +84,11 @@ public class PeopleRepositoryTest {
        Person foundPerson = repo.findById(savedPerson.getId()).get();
        assertThat(foundPerson).isEqualTo(savedPerson);
    }
-    @Test
+   @Test
     public void testPersonIdNotFound(){
         Optional<Person> foundId = repo.findById(-1L);
         assertThat(foundId).isEmpty();
     }
-
     @Test
     public void testNumberOfPeople(){
         repo.save(new Person("John1", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
