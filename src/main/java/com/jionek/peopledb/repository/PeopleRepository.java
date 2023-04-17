@@ -4,6 +4,7 @@ import com.jionek.peopledb.annotation.SQL;
 import com.jionek.peopledb.model.Address;
 import com.jionek.peopledb.model.CrudOperation;
 import com.jionek.peopledb.model.Person;
+import com.jionek.peopledb.model.Region;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -79,10 +80,26 @@ public class PeopleRepository extends CrudRepository<Person> {
         ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
         BigDecimal salary = rs.getBigDecimal("SALARY");
         long homeAddressId = rs.getLong("HOME_ADDRESS");
-        Optional<Address> homeAddress = addressRepository.findById(homeAddressId);
+
+        Address address = extractAddress(rs);
+
         Person person = new Person(personId, firstName, lastName, dob, salary);
-        person.setHomeAddress(homeAddress.orElse(null));
+        person.setHomeAddress(address);
         return person;
+    }
+
+    private Address extractAddress(ResultSet rs) throws SQLException {
+        long addressId = rs.getLong("ID");
+        String streetAddress = rs.getString("STREET_ADDRESS");
+        String address2 = rs.getString("ADDRESS2");
+        String city = rs.getString("CITY");
+        String state = rs.getString("STATE");
+        String postcode = rs.getString("POSTCODE");
+        String county = rs.getString("COUNTY");
+        Region region = Region.valueOf(rs.getString("REGION").toUpperCase());
+        String country = rs.getString("COUNTRY");
+        Address address = new Address(addressId, streetAddress, address2, city, state, postcode, county, region, country);
+        return address;
     }
 
 
