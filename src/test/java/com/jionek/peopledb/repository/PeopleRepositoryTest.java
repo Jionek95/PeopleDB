@@ -84,7 +84,20 @@ public class PeopleRepositoryTest {
        Person foundPerson = repo.findById(savedPerson.getId()).get();
        assertThat(foundPerson).isEqualTo(savedPerson);
    }
-   @Test
+
+    @Test
+    public void canFindPersonByIdWithAddress() {
+        Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+        Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "Fulton County", Region.WEST, "United States");
+        john.setHomeAddress(address);
+
+        Person savedPerson = repo.save(john);
+        Person foundPerson = repo.findById(savedPerson.getId()).get();
+
+        assertThat(foundPerson.getHomeAddress().get().state()).isEqualTo("WA");
+    }
+
+    @Test
     public void testPersonIdNotFound(){
         Optional<Person> foundId = repo.findById(-1L);
         assertThat(foundId).isEmpty();
