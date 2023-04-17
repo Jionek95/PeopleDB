@@ -19,7 +19,15 @@ public class PeopleRepository extends CrudRepository<Person> {
             INSERT INTO PEOPLE
             (FIRST_NAME, LAST_NAME, DOB, SALARY, EMAIL, HOME_ADDRESS)
             VALUES(?, ?, ?, ?, ?, ?)""";
-    public static final String FIND_BY_ID_SQL = "SELECT ID, FIRST_NAME, LAST_NAME, DOB, SALARY, HOME_ADDRESS FROM PEOPLE WHERE ID=?";
+    public static final String FIND_BY_ID_SQL = """
+            SELECT
+            P.ID, P.FIRST_NAME, P.LAST_NAME, P.DOB, P.SALARY, P.HOME_ADDRESS,
+            A.ID, A.STREET_ADDRESS, A.ADDRESS2, A.CITY, A.STATE, A.POSTCODE, A.COUNTY, A.REGION, A.COUNTRY
+            FROM PEOPLE AS P
+            LEFT JOIN ADDRESSES AS A
+            ON P.HOME_ADDRESS = A.ID
+            WHERE P.ID=?
+            """;
     public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
     public static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM PEOPLE";
     public static final String DELETE_SQL = "DELETE FROM PEOPLE WHERE ID=?";
