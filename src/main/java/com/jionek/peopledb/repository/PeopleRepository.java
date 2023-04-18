@@ -50,11 +50,17 @@ public class PeopleRepository extends CrudRepository<Person> {
         ps.setTimestamp(3, convertDobToTimestamp(entity.getDob()));
         ps.setBigDecimal(4, entity.getSalary());
         ps.setString(5, entity.getEmail());
-        if (entity.getHomeAddress().isPresent()) {
-            savedAddress = addressRepository.save(entity.getHomeAddress().get());
-            ps.setLong(6, savedAddress.id());
+        asssociateAddressWithEntity(6, ps, entity.getHomeAddress());
+        asssociateAddressWithEntity(7, ps, entity.getBusinessAddress());
+    }
+
+    private void asssociateAddressWithEntity(int parameterIndex, PreparedStatement ps, Optional<Address> address) throws SQLException {
+        Address savedAddress;
+        if (address.isPresent()) {
+            savedAddress = addressRepository.save(address.get());
+            ps.setLong(parameterIndex, savedAddress.id());
         } else {
-            ps.setObject(6, null);
+            ps.setObject(parameterIndex, null);
         }
     }
 
