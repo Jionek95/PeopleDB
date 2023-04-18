@@ -30,7 +30,7 @@ abstract class CrudRepository<T> {
             while (rs.next()){
                 long id = rs.getLong(1);
                 setIdByAnnotation(id, entity);
-                System.out.println(entity);
+                postSave(entity, id);
             }
             System.out.printf("Records affected: %d%n", recordsAffected);
         } catch (SQLException e) {
@@ -188,6 +188,8 @@ abstract class CrudRepository<T> {
      * The SQL must contain one SQL parameter, i.e. "?" that will bind to the entity's ID.
      */
     protected String getfindByIdSql(){throw new RuntimeException("SQL not defined.");}
+    protected void postSave(T entity, long id) { }
+
 
     abstract T extractEntityFromResultSet(ResultSet rs) throws SQLException;
     abstract void mapForSave(T entity, PreparedStatement ps) throws SQLException;
