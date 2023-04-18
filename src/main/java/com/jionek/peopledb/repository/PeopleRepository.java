@@ -69,6 +69,22 @@ public class PeopleRepository extends CrudRepository<Person> {
         associateAddressWithEntity(7, ps, entity.getBusinessAddress());
         associateSpouseWithEntity(8, ps, entity.getSpouse());
 
+        associateChildWithEntity(entity, ps);
+    }
+
+    @Override
+    protected void postSave(Person entity, long id) {
+        entity.getChildren().stream()
+                .forEach(this::save);
+    }
+
+    private static void associateChildWithEntity(Person entity, PreparedStatement ps) throws SQLException {
+        Optional<Person> parent = entity.getParent();
+        if (parent.isPresent()){
+            ps.setLong(9, parent.get().getId());
+        } else {
+            ps.setObject(9, null);
+        }
     }
 
     private void associateAddressWithEntity(int parameterIndex, PreparedStatement ps, Optional<Address> address) throws SQLException {
