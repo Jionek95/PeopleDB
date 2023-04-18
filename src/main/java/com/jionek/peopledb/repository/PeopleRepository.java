@@ -89,11 +89,14 @@ public class PeopleRepository extends CrudRepository<Person> {
         ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
         BigDecimal salary = rs.getBigDecimal("SALARY");
         long homeAddressId = rs.getLong("HOME_ADDRESS");
+        long businessAddressId = rs.getLong("BUSINESS_ADDRESS");
 
-        Address address = extractAddress(rs);
+        Address homeAddress = extractAddress(rs, "HOME_");
+        Address businessAddress = extractAddress(rs, "BUSINESS_");
         Person person = new Person(personId, firstName, lastName, dob, salary);
 
-        person.setHomeAddress(address);
+        person.setHomeAddress(homeAddress);
+        person.setBusinessAddress(businessAddress);
         return person;
     }
 
@@ -118,7 +121,7 @@ public class PeopleRepository extends CrudRepository<Person> {
         return address;
     }
 
-    // Can be used in general way for commented lines
+    // Can be used in general way
     private <T> T getValueByAlias(String alias, ResultSet rs, Class<T> clazz) throws SQLException {
         int columnCount = rs.getMetaData().getColumnCount();
         for(int colIdx=1; colIdx<=columnCount; colIdx++){
@@ -126,7 +129,7 @@ public class PeopleRepository extends CrudRepository<Person> {
                return (T) rs.getObject(colIdx);
             }
         }
-        throw  new SQLException(String.format("Colin not found for alias: '%s'", alias));
+        throw  new SQLException(String.format("Column not found for alias: '%s'", alias));
     }
 
 
