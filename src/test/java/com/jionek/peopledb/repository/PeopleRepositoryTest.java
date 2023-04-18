@@ -69,13 +69,23 @@ public class PeopleRepositoryTest {
        assertThat(savedPerson1.getId()).isNotEqualTo(savedPerson2.getId());
    }
    @Test
-   public void canSavePersonWithAddress() throws SQLException {
+   public void canSavePersonWithHomeAddress() throws SQLException {
         Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
         Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "Fulton County", Region.WEST, "United States");
         john.setHomeAddress(address);
 
        Person savedPerson = repo.save(john);
        assertThat(savedPerson.getHomeAddress().get().id()).isGreaterThan(0);
+   }
+
+   @Test
+   public void canSavePersonWithBizAddress() throws SQLException {
+        Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+        Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "Fulton County", Region.WEST, "United States");
+        john.setBusinessAddress(address);
+
+       Person savedPerson = repo.save(john);
+       assertThat(savedPerson.getBusinessAddress().get().id()).isGreaterThan(0);
    }
 
    @Test
