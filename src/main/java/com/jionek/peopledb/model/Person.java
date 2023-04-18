@@ -19,6 +19,7 @@ public class Person{
     private String email;
     private Optional<Address> homeAddress = Optional.empty();
     private Optional<Address> businessAddress = Optional.empty();
+    private Optional<Person> spouse = Optional.empty();
 
 
     public Person (String firstName, String lastName, ZonedDateTime dob) {
@@ -99,6 +100,22 @@ public class Person{
         return homeAddress;
     }
 
+    public void setBusinessAddress(Address bizAddress) {
+        this.businessAddress = Optional.ofNullable(bizAddress);
+    }
+
+    public Optional<Address> getBusinessAddress() {
+        return businessAddress;
+    }
+
+    public void setSpouse(Person spouse) {
+        this.spouse = Optional.ofNullable(spouse);
+    }
+
+    public Optional<Person> getSpouse() {
+        return spouse;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -120,13 +137,5 @@ public class Person{
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, dob);
-    }
-
-    public void setBusinessAddress(Address bizAddress) {
-        this.businessAddress = Optional.ofNullable(bizAddress);
-    }
-
-    public Optional<Address> getBusinessAddress() {
-        return businessAddress;
     }
 }
