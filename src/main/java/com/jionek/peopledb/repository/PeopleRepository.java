@@ -19,8 +19,8 @@ public class PeopleRepository extends CrudRepository<Person> {
     private AddressRepository addressRepository;
     public static final String SAVE_PERSON_SQL = """
             INSERT INTO PEOPLE
-            (FIRST_NAME, LAST_NAME, DOB, SALARY, EMAIL, HOME_ADDRESS, BUSINESS_ADDRESS, SPOUSE)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?)""";
+            (FIRST_NAME, LAST_NAME, DOB, SALARY, EMAIL, HOME_ADDRESS, BUSINESS_ADDRESS, SPOUSE, PARENT_ID)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""";
     public static final String FIND_BY_ID_SQL = """
             SELECT
             P.ID AS P_ID, P.FIRST_NAME AS P_FIRST_NAME, P.LAST_NAME AS P_LAST_NAME, P.DOB AS P_DOB, P.SALARY AS P_SALARY,
