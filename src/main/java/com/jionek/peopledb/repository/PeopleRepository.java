@@ -102,13 +102,15 @@ public class PeopleRepository extends CrudRepository<Person> {
     @SQL(value = DELETE_SQL, operationType = CrudOperation.DELETE_ONE)
     @SQL(value = DELETE_IN_SQL, operationType = CrudOperation.DELETE_MANY)
     Person extractEntityFromResultSet(ResultSet rs) throws SQLException {
-        long personId = rs.getLong("ID");
-        String firstName = rs.getString("FIRST_NAME");
-        String lastName = rs.getString("LAST_NAME");
-        ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
-        BigDecimal salary = rs.getBigDecimal("SALARY");
-        long homeAddressId = rs.getLong("HOME_ADDRESS");
-        long businessAddressId = rs.getLong("BUSINESS_ADDRESS");
+        long personId = rs.getLong("P_ID");
+        String firstName = rs.getString("P_FIRST_NAME");
+        String lastName = rs.getString("P_LAST_NAME");
+        ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("P_DOB").toLocalDateTime(), ZoneId.of("+0"));
+        BigDecimal salary = rs.getBigDecimal("P_SALARY");
+        long homeAddressId = rs.getLong("P_HOME_ADDRESS");
+        long businessAddressId = rs.getLong("P_BUSINESS_ADDRESS");
+
+        long spouseId = rs.getLong("P_SPOUSE");
 
         Address homeAddress = extractAddress(rs, "HOME_");
         Address businessAddress = extractAddress(rs, "BUSINESS_");
