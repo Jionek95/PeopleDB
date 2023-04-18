@@ -20,6 +20,8 @@ public class Person{
     private Optional<Address> homeAddress = Optional.empty();
     private Optional<Address> businessAddress = Optional.empty();
     private Optional<Person> spouse = Optional.empty();
+    private Set<Person> children = new HashSet<>();
+    private Optional<Person> parent = Optional.empty();
 
 
     public Person (String firstName, String lastName, ZonedDateTime dob) {
