@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -87,6 +88,21 @@ public class PeopleRepositoryTest {
        Person savedPerson = repo.save(john);
        assertThat(savedPerson.getBusinessAddress().get().id()).isGreaterThan(0);
    }
+
+    @Test
+    public void canSavePersonWithChildren() throws SQLException {
+        Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+        john.addChild(new Person("Johnny", "Smith", ZonedDateTime.of(2010, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
+        john.addChild(new Person("Sarah", "Smith", ZonedDateTime.of(2012, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
+        john.addChild(new Person("Jenny", "Smith", ZonedDateTime.of(2014, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
+
+
+        Person savedPerson = repo.save(john);
+        savedPerson.getChildren().stream()
+                        .map(Person::getId)
+                                .forEach(id -> assertThat(id).isGreaterThan(0));
+
+    }
 
    @Test
    public void canSavePersonWithSpouse(){
