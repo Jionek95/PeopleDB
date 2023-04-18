@@ -96,7 +96,7 @@ public class PeopleRepositoryTest {
    }
 
     @Test
-    public void canFindPersonByIdWithAddress() {
+    public void canFindPersonByIdWithHomeAddress() {
         Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
         Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "Fulton County", Region.WEST, "United States");
         john.setHomeAddress(address);
@@ -105,6 +105,18 @@ public class PeopleRepositoryTest {
         Person foundPerson = repo.findById(savedPerson.getId()).get();
 
         assertThat(foundPerson.getHomeAddress().get().state()).isEqualTo("WA");
+    }
+
+    @Test
+    public void canFindPersonByIdWithBusinessAddress() {
+        Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+        Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "Fulton County", Region.WEST, "United States");
+        john.setBusinessAddress(address);
+
+        Person savedPerson = repo.save(john);
+        Person foundPerson = repo.findById(savedPerson.getId()).get();
+
+        assertThat(foundPerson.getBusinessAddress().get().state()).isEqualTo("WA");
     }
 
     @Test
