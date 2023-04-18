@@ -5,8 +5,10 @@ import com.jionek.peopledb.annotation.Id;
 import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 public class Person{
     @Id
@@ -139,5 +141,22 @@ public class Person{
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, dob);
+    }
+
+    public void addChild(Person child) {
+        this.children.add(child);
+        child.setParent(this);
+    }
+
+    public void setParent(Person parent) {
+        this.parent = Optional.ofNullable(parent);
+    }
+
+    public Optional<Person> getParent() {
+        return parent;
+    }
+
+    public Set<Person> getChildren() {
+        return children;
     }
 }
