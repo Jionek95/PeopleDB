@@ -18,6 +18,7 @@ public class Person{
     private BigDecimal salary;
     private String email;
     private Optional<Address> homeAddress = Optional.empty();
+    private Optional<Address> bizAddress = Optional.empty();
 
 
     public Person (String firstName, String lastName, ZonedDateTime dob) {
@@ -119,5 +120,13 @@ public class Person{
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, dob);
+    }
+
+    public void setBizAddress(Address bizAddress) {
+        this.bizAddress = Optional.ofNullable(bizAddress);
+    }
+
+    public Optional<Address> getBizAddress() {
+        return bizAddress;
     }
 }
