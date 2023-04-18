@@ -89,6 +89,18 @@ public class PeopleRepositoryTest {
    }
 
    @Test
+   public void canSavePersonWithSpouse(){
+       Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+       Person joan = new Person("JoannZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+
+       Person savedJohn = repo.save(john);
+       Person savedJoan = repo.save(joan);
+
+       john.setSpouse(joan);
+
+       assertThat(john.getSpouse().get().getId()).isGreaterThan(0);
+   }
+   @Test
     public void canFindPersonById(){
        Person savedPerson = repo.save(new Person(2L,"test", "jackson", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)));
        Person foundPerson = repo.findById(savedPerson.getId()).get();
@@ -105,6 +117,19 @@ public class PeopleRepositoryTest {
         Person foundPerson = repo.findById(savedPerson.getId()).get();
 
         assertThat(foundPerson.getHomeAddress().get().state()).isEqualTo("WA");
+    }
+    @Test
+    public void canFindPersonByIdWithSpouse() {
+        Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+        Person joan = new Person("JoannZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+        john.setSpouse(joan);
+
+        Person savedJohn = repo.save(john);
+//        Person savedJoan = repo.save(joan);
+
+        Person foundJohn = repo.findById(savedJohn.getId()).get();
+
+        assertThat(foundJohn.getSpouse().get().getId()).isEqualTo(joan.getId());
     }
 
     @Test
