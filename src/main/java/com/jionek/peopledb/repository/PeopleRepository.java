@@ -8,6 +8,7 @@ import com.jionek.peopledb.model.Region;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -114,11 +115,37 @@ public class PeopleRepository extends CrudRepository<Person> {
 
         Address homeAddress = extractAddress(rs, "HOME_");
         Address businessAddress = extractAddress(rs, "BUSINESS_");
+
+        Person spouse = extractSpouse(rs, "S_");
+
         Person person = new Person(personId, firstName, lastName, dob, salary);
 
         person.setHomeAddress(homeAddress);
         person.setBusinessAddress(businessAddress);
+        person.setSpouse(spouse);
         return person;
+    }
+
+    private Person extractSpouse(ResultSet rs, String aliasPrefix) throws SQLException{
+        Long spouseId = getValueByAlias(aliasPrefix + "ID", rs, Long.class);
+        if (spouseId == null) return null;
+        String firstName = getValueByAlias(aliasPrefix + "FIRST_NAME", rs, String.class);
+        String lastName = getValueByAlias(aliasPrefix + "LAST_NAME", rs, String.class);
+        ZonedDateTime dob = ZonedDateTime.of(getValueByAlias(aliasPrefix + "DOB", rs, LocalDateTime.class), ZoneId.of("+0"));
+        BigDecimal salary = getValueByAlias(aliasPrefix + "SALARY", rs, BigDecimal.class);
+
+        // For now addresses are unavailable hehe
+//        long homeAddressId = getValueByAlias(aliasPrefix + "HOME_ADDRESS", rs, Long.class);
+//        long businessAddressId = getValueByAlias(aliasPrefix + "BUSINESS_ADDRESS", rs, Long.class);
+
+        Address homeAddress = extractAddress(rs, "HOME_");
+        Address businessAddress = extractAddress(rs, "BUSINESS_");
+
+        Person spouse = new Person(spouseId, firstName, lastName, dob, salary);
+        spouse.setHomeAddress(homeAddress);
+        spouse.setBusinessAddress(businessAddress);
+
+        return spouse;
     }
 
     private Address extractAddress(ResultSet rs, String aliasPrefix) throws SQLException {
