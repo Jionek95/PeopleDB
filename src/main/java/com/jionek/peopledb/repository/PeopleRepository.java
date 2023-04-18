@@ -97,20 +97,24 @@ public class PeopleRepository extends CrudRepository<Person> {
         return person;
     }
 
-    private Address extractAddress(ResultSet rs) throws SQLException {
-        if (rs.getObject("A_ID") == null) return null;
-        long addressId = rs.getLong("A_ID");
-//        Long adrId = getValueByAlias("A_ID", rs, Long.class);
-        String streetAddress = rs.getString("STREET_ADDRESS");
-        String address2 = rs.getString("ADDRESS2");
-        String city = rs.getString("CITY");
-        String state = rs.getString("STATE");
-        String postcode = rs.getString("POSTCODE");
-        String county = rs.getString("COUNTY");
-        Region region = Region.valueOf(rs.getString("REGION").toUpperCase());
-        String country = rs.getString("COUNTRY");
-        Address address = new Address(addressId, streetAddress, address2, city, state, postcode, county, region, country);
-//        Address address = new Address(adrId, streetAddress, address2, city, state, postcode, county, region, country);
+    private Address extractAddress(ResultSet rs, String aliasPrefix) throws SQLException {
+//        if (rs.getObject("HOME_ID") == null) return null;
+//        long addressId = rs.getLong("HOME_ID");
+
+        Long adrId = getValueByAlias(aliasPrefix + "ID", rs, Long.class);
+        if (adrId == null) return null;
+        String streetAddress = getValueByAlias(aliasPrefix + "STREET_ADDRESS", rs, String.class);
+        String address2 = getValueByAlias(aliasPrefix + "ADDRESS2", rs, String.class);
+        String city = getValueByAlias(aliasPrefix + "CITY", rs, String.class);
+        String state = getValueByAlias(aliasPrefix + "STATE", rs, String.class);
+        String postcode = getValueByAlias(aliasPrefix + "POSTCODE", rs, String.class);
+        String county = getValueByAlias(aliasPrefix + "COUNTY", rs, java.lang.String.class);
+        Region region = Region.valueOf(getValueByAlias(aliasPrefix + "REGION", rs, String.class).toUpperCase());
+        String country = getValueByAlias(aliasPrefix + "COUNTRY", rs, String.class);
+        Address address = new Address(adrId, streetAddress, address2, city, state, postcode, county, region, country);
+
+//        Address address = new Address(addressId, streetAddress, address2, city, state, postcode, county, region, country);
+
         return address;
     }
 
