@@ -12,17 +12,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -103,15 +98,13 @@ public class PeopleRepositoryTest {
             .forEach(id -> assertThat(id).isGreaterThan(0));
     }
     @Test
-    public void canSavePersonWithSpouse(){
+    public void canSavePersonWithSpouse() throws SQLException {
        Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
        Person joan = new Person("JoannZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
 
        Person savedJohn = repo.save(john);
        Person savedJoan = repo.save(joan);
-
        john.setSpouse(joan);
-
        assertThat(john.getSpouse().get().getId()).isGreaterThan(0);
    }
 
