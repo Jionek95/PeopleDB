@@ -21,8 +21,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PeopleRepositoryTest {
@@ -57,8 +59,8 @@ public class PeopleRepositoryTest {
         Person savedPerson = repo.save(john);
         assertThat(savedPerson.getId()).isGreaterThan(0);
     }
-   @Test
-   public void canSaveTwoPeople(){
+    @Test
+    public void canSaveTwoPeople(){
        Person john = new Person(
                "John", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))
        );
@@ -69,8 +71,9 @@ public class PeopleRepositoryTest {
        Person savedPerson2 = repo.save(bobby);
        assertThat(savedPerson1.getId()).isNotEqualTo(savedPerson2.getId());
    }
-   @Test
-   public void canSavePersonWithHomeAddress() throws SQLException {
+
+    @Test
+    public void canSavePersonWithHomeAddress() throws SQLException {
         Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
         Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "Fulton County", Region.WEST, "United States");
         john.setHomeAddress(address);
@@ -78,9 +81,8 @@ public class PeopleRepositoryTest {
        Person savedPerson = repo.save(john);
        assertThat(savedPerson.getHomeAddress().get().id()).isGreaterThan(0);
    }
-
-   @Test
-   public void canSavePersonWithBizAddress() throws SQLException {
+    @Test
+    public void canSavePersonWithBizAddress() throws SQLException {
         Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
         Address address = new Address(null, "123 Beale St.", "Apt. 1a", "Wala Wala", "WA", "90210", "Fulton County", Region.WEST, "United States");
         john.setBusinessAddress(address);
@@ -88,7 +90,6 @@ public class PeopleRepositoryTest {
        Person savedPerson = repo.save(john);
        assertThat(savedPerson.getBusinessAddress().get().id()).isGreaterThan(0);
    }
-
     @Test
     public void canSavePersonWithChildren() throws SQLException {
         Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
@@ -96,16 +97,13 @@ public class PeopleRepositoryTest {
         john.addChild(new Person("Sarah", "Smith", ZonedDateTime.of(2012, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
         john.addChild(new Person("Jenny", "Smith", ZonedDateTime.of(2014, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
 
-
         Person savedPerson = repo.save(john);
         savedPerson.getChildren().stream()
-                        .map(Person::getId)
-                                .forEach(id -> assertThat(id).isGreaterThan(0));
-
+            .map(Person::getId)
+            .forEach(id -> assertThat(id).isGreaterThan(0));
     }
-
-   @Test
-   public void canSavePersonWithSpouse(){
+    @Test
+    public void canSavePersonWithSpouse(){
        Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
        Person joan = new Person("JoannZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
 
@@ -116,13 +114,13 @@ public class PeopleRepositoryTest {
 
        assertThat(john.getSpouse().get().getId()).isGreaterThan(0);
    }
-   @Test
+
+    @Test
     public void canFindPersonById(){
        Person savedPerson = repo.save(new Person(2L,"test", "jackson", ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)));
        Person foundPerson = repo.findById(savedPerson.getId()).get();
        assertThat(foundPerson).isEqualTo(savedPerson);
    }
-
     @Test
     public void canFindPersonByIdWithHomeAddress() {
         Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
@@ -147,7 +145,6 @@ public class PeopleRepositoryTest {
 
         assertThat(foundJohn.getSpouse().get().getId()).isEqualTo(joan.getId());
     }
-
     @Test
     public void canFindPersonByIdWithBusinessAddress() {
         Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
@@ -159,12 +156,24 @@ public class PeopleRepositoryTest {
 
         assertThat(foundPerson.getBusinessAddress().get().state()).isEqualTo("WA");
     }
+    @Test
+    public void canFindPersonByIdWithChildren(){
+        Person john = new Person("JohnZZZZZ", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6")));
+        john.addChild(new Person("Johnny", "Smith", ZonedDateTime.of(2010, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
+        john.addChild(new Person("Sarah", "Smith", ZonedDateTime.of(2012, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
+        john.addChild(new Person("Jenny", "Smith", ZonedDateTime.of(2014, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
+
+        Person savedPerson = repo.save(john);
+        Person foundPerson = repo.findById(savedPerson.getId()).get();
+        assertThat(foundPerson.getChildren().stream().map(Person::getFirstName).collect(toSet())).contains("Johnny", "Sarah", "Jenny");
+    }
 
     @Test
     public void testPersonIdNotFound(){
         Optional<Person> foundId = repo.findById(-1L);
         assertThat(foundId).isEmpty();
     }
+
     @Test
     @Disabled
     public void testNumberOfPeople(){
@@ -193,6 +202,7 @@ public class PeopleRepositoryTest {
 
         assertThat(endCount).isEqualTo(startCount + 2);
     }
+
     @Test
     public void canDelete(){
         Person savedPerson = repo.save(new Person("test", "jackson", ZonedDateTime.now().withZoneSameInstant(ZoneId.of("+0"))));
@@ -201,6 +211,7 @@ public class PeopleRepositoryTest {
         long endCount = repo.count();
         assertThat(endCount).isEqualTo(startCount - 1);
     }
+
     @Test
     public void canDeleteMultiplePeople(){
         Person p1 = repo.save(new Person("John1", "Smith", ZonedDateTime.of(1980, 11, 15, 15, 15, 0, 0, ZoneId.of("-6"))));
