@@ -19,15 +19,15 @@ public class PeopleRepository extends CrudRepository<Person> {
     private AddressRepository addressRepository;
     public static final String SAVE_PERSON_SQL = """
             INSERT INTO PEOPLE
-            (FIRST_NAME, LAST_NAME, DOB, SALARY, EMAIL, HOME_ADDRESS, BUSINESS_ADDRESS, SPOUSE, PARENT_ID)
+            (FIRST_NAME, LAST_NAME, DOB, SALARY, EMAIL, HOME_ADDRESS, BUSINESS_ADDRESS, SPOUSE_ID, PARENT_ID)
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""";
     public static final String FIND_BY_ID_SQL = """
             SELECT
             P.ID AS P_ID, P.FIRST_NAME AS P_FIRST_NAME, P.LAST_NAME AS P_LAST_NAME, P.DOB AS P_DOB, P.SALARY AS P_SALARY,
-            P.HOME_ADDRESS AS P_HOME_ADDRESS, P.BUSINESS_ADDRESS AS P_BUSINESS_ADDRESS, P.SPOUSE AS P_SPOUSE,
+            P.HOME_ADDRESS AS P_HOME_ADDRESS, P.BUSINESS_ADDRESS AS P_BUSINESS_ADDRESS, P.SPOUSE_ID AS P_SPOUSE_ID,
             
             S.ID AS S_ID, S.FIRST_NAME AS S_FIRST_NAME, S.LAST_NAME AS S_LAST_NAME, S.DOB AS S_DOB, S.SALARY AS S_SALARY,
-            S.HOME_ADDRESS AS S_HOME_ADDRESS, S.BUSINESS_ADDRESS AS S_BUSINESS_ADDRESS, S.SPOUSE AS S_SPOUSE,
+            S.HOME_ADDRESS AS S_HOME_ADDRESS, S.BUSINESS_ADDRESS AS S_BUSINESS_ADDRESS, S.SPOUSE_ID AS S_SPOUSE_ID,
             
             HOME.ID AS HOME_ID, HOME.STREET_ADDRESS AS HOME_STREET_ADDRESS, HOME.ADDRESS2 AS HOME_ADDRESS2, HOME.CITY AS HOME_CITY,
             HOME.STATE AS HOME_STATE, HOME.POSTCODE AS HOME_POSTCODE, HOME.COUNTY AS HOME_COUNTY, HOME.REGION AS HOME_REGION, HOME.COUNTRY AS HOME_COUNTRY,
@@ -40,7 +40,7 @@ public class PeopleRepository extends CrudRepository<Person> {
             LEFT JOIN ADDRESSES AS HOME ON P.HOME_ADDRESS = HOME.ID
             LEFT JOIN ADDRESSES AS BUSINESS ON P.BUSINESS_ADDRESS = BUSINESS.ID
             
-            LEFT JOIN PEOPLE AS S ON P.SPOUSE = S.ID
+            LEFT JOIN PEOPLE AS S ON P.SPOUSE_ID = S.ID
             
             WHERE P.ID=?
             """;
@@ -128,7 +128,7 @@ public class PeopleRepository extends CrudRepository<Person> {
         long homeAddressId = rs.getLong("P_HOME_ADDRESS");
         long businessAddressId = rs.getLong("P_BUSINESS_ADDRESS");
 
-        long spouseId = rs.getLong("P_SPOUSE");
+        long spouseId = rs.getLong("P_SPOUSE_ID");
 
         Address homeAddress = extractAddress(rs, "HOME_");
         Address businessAddress = extractAddress(rs, "BUSINESS_");
