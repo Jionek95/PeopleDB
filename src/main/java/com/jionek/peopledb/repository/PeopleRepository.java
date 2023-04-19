@@ -147,14 +147,15 @@ public class PeopleRepository extends CrudRepository<Person> {
         return finalPerson;
     }
 
-    private Person extractPerson(ResultSet rs, String aliastPrefix) throws SQLException {
-        Long personId = getValueByAlias(aliastPrefix + "ID", rs, Long.class);
-        String firstName = getValueByAlias(aliastPrefix + "FIRST_NAME", rs, String.class);
-        String lastName = getValueByAlias(aliastPrefix + "LAST_NAME", rs, String.class);
-        ZonedDateTime dob = ZonedDateTime.of(getValueByAlias(aliastPrefix + "DOB", rs, LocalDateTime.class), ZoneId.of("+0"));
-        BigDecimal salary = getValueByAlias(aliastPrefix + "SALARY", rs, BigDecimal.class);
+    private Optional<Person> extractPerson(ResultSet rs, String aliasPrefix) throws SQLException {
+        Long personId = getValueByAlias(aliasPrefix + "ID", rs, Long.class);
+        if (personId == null) return Optional.empty();
+        String firstName = getValueByAlias(aliasPrefix + "FIRST_NAME", rs, String.class);
+        String lastName = getValueByAlias(aliasPrefix + "LAST_NAME", rs, String.class);
+        ZonedDateTime dob = ZonedDateTime.of(getValueByAlias(aliasPrefix + "DOB", rs, LocalDateTime.class), ZoneId.of("+0"));
+        BigDecimal salary = getValueByAlias(aliasPrefix + "SALARY", rs, BigDecimal.class);
         Person person = new Person(personId, firstName, lastName, dob, salary);
-        return person;
+        return Optional.of(person);
     }
 
     private Person extractSpouse(ResultSet rs, String aliasPrefix) throws SQLException{
