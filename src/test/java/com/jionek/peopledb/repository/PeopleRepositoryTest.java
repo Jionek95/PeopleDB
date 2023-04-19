@@ -168,7 +168,7 @@ public class PeopleRepositoryTest {
     }
 
     @Test
-    @Disabled
+//    @Disabled
     public void testNumberOfPeople(){
         repo.save(new Person("John1", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));
         repo.save(new Person("John2", "Smith", ZonedDateTime.of(1980, 11, 15 , 15,15,0,0, ZoneId.of("-6"))));

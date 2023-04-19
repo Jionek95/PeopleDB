@@ -48,7 +48,7 @@ public class PeopleRepository extends CrudRepository<Person> {
             
             WHERE P.ID=?
             """;
-    public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE";
+    public static final String FIND_ALL_SQL = "SELECT * FROM PEOPLE LIMIT 100";
     public static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM PEOPLE";
     public static final String DELETE_SQL = "DELETE FROM PEOPLE WHERE ID=?";
     public static final String DELETE_IN_SQL = "DELETE FROM PEOPLE WHERE ID IN(:ids)";
