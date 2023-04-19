@@ -132,7 +132,7 @@ public class PeopleRepository extends CrudRepository<Person> {
             } if (!finalPerson.equals(currentPerson)) {         //  not really sure when they're not equal
 
             }
-            Person child = extractPerson(rs, "CHILD_");
+            Optional<Person> child = extractPerson(rs, "CHILD_");
 
             Address homeAddress = extractAddress(rs, "HOME_");
             Address businessAddress = extractAddress(rs, "BUSINESS_");
@@ -142,7 +142,7 @@ public class PeopleRepository extends CrudRepository<Person> {
             finalPerson.setHomeAddress(homeAddress);
             finalPerson.setBusinessAddress(businessAddress);
             finalPerson.setSpouse(spouse);
-            finalPerson.addChild(child);
+            child.ifPresent(finalPerson::addChild);
         } while (rs.next());
         return finalPerson;
     }
