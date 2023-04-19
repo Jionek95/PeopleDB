@@ -31,27 +31,18 @@ public class Person{
         this.lastName = lastName;
         this.dob = dob;
     }
-
     public Person(Long id, String firstName, String lastName, ZonedDateTime dob) {
         this(firstName, lastName, dob);
         this.id = id;
     }
-
     public Person(Long id, String firstName, String lastName, ZonedDateTime dob, BigDecimal salary) {
         this(id, firstName, lastName, dob);
         this.salary = salary;
     }
 
-    public Person(Long id, String firstName, String lastName, ZonedDateTime dob, BigDecimal salary, String email) {
-        this(id, firstName, lastName, dob, salary);
-        this.email = email;
-    }
-
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -59,7 +50,6 @@ public class Person{
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -67,7 +57,6 @@ public class Person{
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -75,7 +64,6 @@ public class Person{
     public ZonedDateTime getDob() {
         return dob;
     }
-
     public void setDob(ZonedDateTime dob) {
         this.dob = dob;
     }
@@ -83,7 +71,6 @@ public class Person{
     public BigDecimal getSalary() {
         return salary;
     }
-
     public void setSalary(BigDecimal salary) {
         this.salary = salary;
     }
@@ -91,7 +78,6 @@ public class Person{
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -99,7 +85,6 @@ public class Person{
     public void setHomeAddress(Address homeAddress) {
         this.homeAddress = Optional.ofNullable(homeAddress);
     }
-
     public Optional<Address> getHomeAddress() {
         return homeAddress;
     }
@@ -107,7 +92,6 @@ public class Person{
     public void setBusinessAddress(Address bizAddress) {
         this.businessAddress = Optional.ofNullable(bizAddress);
     }
-
     public Optional<Address> getBusinessAddress() {
         return businessAddress;
     }
@@ -115,7 +99,6 @@ public class Person{
     public void setSpouse(Person spouse) {
         this.spouse = Optional.ofNullable(spouse);
     }
-
     public Optional<Person> getSpouse() {
         return spouse;
     }
@@ -129,7 +112,6 @@ public class Person{
                 ", dob=" + dob +
                 '}';
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -137,7 +119,6 @@ public class Person{
         return Objects.equals(id, person.id) && firstName.equals(person.firstName) && lastName.equals(person.lastName) &&
                 dob.withZoneSameInstant(ZoneId.of("+0")).equals(person.dob.withZoneSameInstant(ZoneId.of("+0")));
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, dob);
@@ -147,16 +128,13 @@ public class Person{
         this.children.add(child);
         child.setParent(this);
     }
-
+    public Set<Person> getChildren() {
+        return children;
+    }
     public void setParent(Person parent) {
         this.parent = Optional.ofNullable(parent);
     }
-
     public Optional<Person> getParent() {
         return parent;
-    }
-
-    public Set<Person> getChildren() {
-        return children;
     }
 }
