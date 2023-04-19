@@ -134,16 +134,26 @@ public class PeopleRepository extends CrudRepository<Person> {
 
         long spouseId = rs.getLong("P_SPOUSE_ID");
 
-        Address homeAddress = extractAddress(rs, "HOME_");
-        Address businessAddress = extractAddress(rs, "BUSINESS_");
+            Address homeAddress = extractAddress(rs, "HOME_");
+            Address businessAddress = extractAddress(rs, "BUSINESS_");
 
-        Person spouse = extractSpouse(rs, "S_");
+            Person spouse = extractSpouse(rs, "S_");
 
+            finalPerson.setHomeAddress(homeAddress);
+            finalPerson.setBusinessAddress(businessAddress);
+            finalPerson.setSpouse(spouse);
+            finalPerson.addChild(child);
+        } while (rs.next());
+        return finalPerson;
+    }
+
+    private Person extractPerson(ResultSet rs, String aliastPrefix) throws SQLException {
+        Long personId = getValueByAlias(aliastPrefix + "ID", rs, Long.class);
+        String firstName = getValueByAlias(aliastPrefix + "FIRST_NAME", rs, String.class);
+        String lastName = getValueByAlias(aliastPrefix + "LAST_NAME", rs, String.class);
+        ZonedDateTime dob = ZonedDateTime.of(getValueByAlias(aliastPrefix + "DOB", rs, LocalDateTime.class), ZoneId.of("+0"));
+        BigDecimal salary = getValueByAlias(aliastPrefix + "SALARY", rs, BigDecimal.class);
         Person person = new Person(personId, firstName, lastName, dob, salary);
-
-        person.setHomeAddress(homeAddress);
-        person.setBusinessAddress(businessAddress);
-        person.setSpouse(spouse);
         return person;
     }
 
