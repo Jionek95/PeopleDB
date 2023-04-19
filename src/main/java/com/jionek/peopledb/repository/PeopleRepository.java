@@ -55,7 +55,6 @@ public class PeopleRepository extends CrudRepository<Person> {
         addressRepository = new AddressRepository(connection);
     }
 
-
     @Override
     @SQL(value = SAVE_PERSON_SQL, operationType = CrudOperation.SAVE)
     void mapForSave(Person entity, PreparedStatement ps) throws SQLException {
@@ -86,7 +85,6 @@ public class PeopleRepository extends CrudRepository<Person> {
             ps.setObject(9, null);
         }
     }
-
     private void associateAddressWithEntity(int parameterIndex, PreparedStatement ps, Optional<Address> address) throws SQLException {
         Address savedAddress;
         if (address.isPresent()) {
@@ -96,7 +94,6 @@ public class PeopleRepository extends CrudRepository<Person> {
             ps.setObject(parameterIndex, null);
         }
     }
-
     private void associateSpouseWithEntity(int parameterIndex, PreparedStatement ps, Optional<Person> spouse) throws SQLException {
         Person savedPerson;
         if (spouse.isPresent()) {
@@ -169,6 +166,8 @@ public class PeopleRepository extends CrudRepository<Person> {
     }
 
     private Address extractAddress(ResultSet rs, String aliasPrefix) throws SQLException {
+
+        // Mysql works on aliases too
 //        if (rs.getObject("HOME_ID") == null) return null;
 //        long addressId = rs.getLong("HOME_ID");
 
@@ -200,33 +199,9 @@ public class PeopleRepository extends CrudRepository<Person> {
         throw  new SQLException(String.format("Column not found for alias: '%s'", alias));
     }
 
-
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
         return Timestamp.valueOf(dob.withZoneSameInstant(ZoneId.of("+0")).toLocalDateTime());
     }
-
-    /** OVERLOADED METHOD findById(Person person)
-//    public Optional<Person> findById(Person person) {
-//
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(FIND_BY_ID_SQL);
-//            ps.setLong(1, person.getId());
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                long personId = rs.getLong("ID");
-//                String firstName = rs.getString("FIRST_NAME");
-//                String lastName = rs.getString("LAST_NAME");
-//                ZonedDateTime dob = ZonedDateTime.of(rs.getTimestamp("DOB").toLocalDateTime(), ZoneId.of("+0"));
-//                person = new Person(firstName, lastName, dob);
-//                person.setId(personId);
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return Optional.ofNullable(person);
-//    }
-     **/
 
 
     /** SLOWER VERSION OF delete(Person...people)
