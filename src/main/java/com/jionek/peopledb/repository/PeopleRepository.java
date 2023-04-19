@@ -126,7 +126,7 @@ public class PeopleRepository extends CrudRepository<Person> {
     Person extractEntityFromResultSet(ResultSet rs) throws SQLException {
         Person finalPerson = null;
         do {
-            Person currentPerson = extractPerson(rs, "P_");
+            Person currentPerson = extractPerson(rs, "P_").get();
             if (finalPerson == null){
                 finalPerson = currentPerson;
             } if (!finalPerson.equals(currentPerson)) {         //  not really sure when they're not equal
