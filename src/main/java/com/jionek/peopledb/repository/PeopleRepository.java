@@ -217,7 +217,7 @@ public class PeopleRepository extends CrudRepository<Person> {
                return (T) rs.getObject(colIdx);
             }
         }
-        throw  new SQLException(String.format("Column not found for alias: '%s'", alias));
+        return null;
     }
 
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
