@@ -212,12 +212,22 @@ public class PeopleRepository extends CrudRepository<Person> {
     // Can be used in general way
     private <T> T getValueByAlias(String alias, ResultSet rs, Class<T> clazz) throws SQLException {
         int columnCount = rs.getMetaData().getColumnCount();
-        for(int colIdx=1; colIdx<=columnCount; colIdx++){
-            if (alias.equals(rs.getMetaData().getColumnLabel(colIdx))){
-               return (T) rs.getObject(colIdx);
+        int foundIdx = getIndexForAlias(alias, rs, columnCount);
+        return foundIdx == 0 ? null : (T) rs.getObject(foundIdx);
+    }
+
+    private int getIndexForAlias(String alias, ResultSet rs, int columnCount) throws SQLException {
+        Integer foundIdx = aliasColIdxMap.getOrDefault(alias, 0);
+        if (foundIdx == 0) {
+            for(int colIdx = 1; colIdx<= columnCount; colIdx++){
+                if (alias.equals(rs.getMetaData().getColumnLabel(colIdx))){
+                    foundIdx = colIdx;
+                    aliasColIdxMap.put(alias, foundIdx);
+                    break;
+                }
             }
         }
-        return foundInx == 0 ? null : (T) rs.getObject(foundInx);
+        return foundIdx;
     }
 
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
