@@ -29,19 +29,17 @@ abstract class CrudRepository<T> {
 
     public T save(T entity) throws UnableToSaveException {
         try {
-            PreparedStatement ps = connection.prepareStatement(getSqlByAnnotation(CrudOperation.SAVE, this::getSaveSql), Statement.RETURN_GENERATED_KEYS);
-            mapForSave(entity, ps);
-            int recordsAffected = ps.executeUpdate();
-            ResultSet rs = ps.getGeneratedKeys();
+            mapForSave(entity, savePS);
+            int recordsAffected = savePS.executeUpdate();
+            ResultSet rs = savePS.getGeneratedKeys();
             while (rs.next()){
                 long id = rs.getLong(1);
                 setIdByAnnotation(id, entity);
                 postSave(entity, id);
             }
-            System.out.printf("Records affected: %d%n", recordsAffected);
+//            System.out.printf("Records affected: %d%n", recordsAffected);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new UnableToSaveException("Tried to save person: " + entity);
         }
         return entity;
     }
