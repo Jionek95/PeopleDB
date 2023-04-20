@@ -217,7 +217,7 @@ public class PeopleRepository extends CrudRepository<Person> {
                return (T) rs.getObject(colIdx);
             }
         }
-        return null;
+        return foundInx == 0 ? null : (T) rs.getObject(foundInx);
     }
 
     private static Timestamp convertDobToTimestamp(ZonedDateTime dob) {
