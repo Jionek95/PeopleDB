@@ -15,9 +15,15 @@ import static java.util.stream.Collectors.joining;
 
 abstract class CrudRepository<T> {
     protected Connection connection;
+    private PreparedStatement savePS;
 
     public CrudRepository(Connection connection) {
-        this.connection = connection;
+        try {
+            this.connection = connection;
+            savePS = connection.prepareStatement(getSqlByAnnotation(CrudOperation.SAVE, this::getSaveSql), Statement.RETURN_GENERATED_KEYS);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
