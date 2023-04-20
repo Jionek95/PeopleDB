@@ -135,7 +135,8 @@ public class PeopleRepository extends CrudRepository<Person> {
             if (finalPerson == null){
                 finalPerson = currentPerson;
             } if (!finalPerson.equals(currentPerson)) {         //  not really sure when they're not equal
-
+                rs.previous();
+                break;
             }
             Optional<Person> child = extractPerson(rs, "CHILD_");
 
