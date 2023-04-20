@@ -11,6 +11,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -58,6 +60,8 @@ public class PeopleRepository extends CrudRepository<Person> {
     public static final String DELETE_SQL = "DELETE FROM PEOPLE WHERE ID=?";
     public static final String DELETE_IN_SQL = "DELETE FROM PEOPLE WHERE ID IN(:ids)";
     public static final String UPDATE_SQL = "UPDATE PEOPLE SET FIRST_NAME=?, LAST_NAME=?, DOB=?, SALARY=? WHERE ID=?";
+
+    private Map<String, Integer> aliasColIdxMap = new HashMap<>();
 
     public PeopleRepository(Connection connection) {
         super(connection);
