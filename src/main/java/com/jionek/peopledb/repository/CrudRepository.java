@@ -3,6 +3,7 @@ package com.jionek.peopledb.repository;
 import com.jionek.peopledb.annotation.Id;
 import com.jionek.peopledb.annotation.MultiSql;
 import com.jionek.peopledb.annotation.SQL;
+import com.jionek.peopledb.exception.DataException;
 import com.jionek.peopledb.exception.UnableToSaveException;
 import com.jionek.peopledb.model.CrudOperation;
 
@@ -22,7 +23,7 @@ abstract class CrudRepository<T> {
             this.connection = connection;
             savePS = connection.prepareStatement(getSqlByAnnotation(CrudOperation.SAVE, this::getSaveSql), Statement.RETURN_GENERATED_KEYS);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataException("Unable to create prepared statement for CrudRepository", e);
         }
     }
 
